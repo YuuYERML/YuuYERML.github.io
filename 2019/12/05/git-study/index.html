@@ -6,16 +6,14 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>hexo blog process | Hexo</title>
+  <title>git study | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="##环境搭建与框架下载    #####安装nodejs与hexo与git的链接        1.下载nodejs，nodejs官网        2.安装下载，不停点下一步就行，安装完成后会有两部分，nodejs和npm.">
-<meta property="og:type" content="article">
-<meta property="og:title" content="hexo blog process">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;hexo-blog-process&#x2F;index.html">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="git study">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;05&#x2F;git-study&#x2F;index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="##环境搭建与框架下载    #####安装nodejs与hexo与git的链接        1.下载nodejs，nodejs官网        2.安装下载，不停点下一步就行，安装完成后会有两部分，nodejs和npm.">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-05T10:10:28.177Z">
+<meta property="og:updated_time" content="2019-12-05T10:07:07.742Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -152,28 +150,27 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-hexo-blog-process" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-git-study" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      hexo blog process
+      git study
     </h1>
   
 
         
-        <a href="/2019/12/04/hexo-blog-process/" class="archive-article-date">
-  	<time datetime="2019-12-04T07:41:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-04</time>
+        <a href="/2019/12/05/git-study/" class="archive-article-date">
+  	<time datetime="2019-12-05T10:07:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-05</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>##环境搭建与框架下载<br>    #####安装nodejs与hexo与git的链接<br>        1.下载nodejs，<a href="http://www.nodejs.org" target="_blank" rel="noopener">nodejs官网</a><br>        2.安装下载，不停点下一步就行，安装完成后会有两部分，nodejs和npm.<br>        <a id="more"></a>3.找到cmd，<strong>右键用管理员模式打开</strong>，输入”<strong>node -v</strong>“,查看nodejs版本，输入”<strong>npm -v</strong>“，查看npm版本，查看是否成功安装<br>        4.首先借助npm，国内借助cnpm，输入”<strong>npm install -g cnpm –registry=<a href="https://registry.npm.taobao.org" target="_blank" rel="noopener">https://registry.npm.taobao.org</a></strong>“,自动下载<br>        5.输入“<strong>cnpm</strong>”，查看是否下载成功cnpm，如果没成功就再重复一遍<br>        6.下载hexo,输入“<strong>cnpm install -g hexo-cli</strong>”,自动下载，下载完成后用“<strong>hexo -v</strong>”查看是否成功<br>        7.下载git，<a href="https://git-scm.com/" target="_blank" rel="noopener">git官网</a><br>        8.安装下载，不停点下一步就行。<br>        9.右键我的电脑，属性，高级系统设置，找到高级，环境变量，选择PATH，新建输入git安装目录下的bin，例如（F:\git\Git\bin）<br>        10.打开cmd，可以用git –version来查看git是否安装成功，没成功就再装一遍，没什么问题。<br>        11.创建一个blog，哪里都行，然后在文件夹中右键空白，点击Git Bash Here，没有那可能是注册表什么，<a href="https://www.baidu.com" target="_blank" rel="noopener">百度</a>即可<br>        12.打开Git Bash Here 输入ssh-keygen -t rsa -C ‘xxx’,xxx填写你注册github时候的邮箱地址。没github就注册一个，也很容易<br>        13.然后应该会在”<strong>C:\Users\HP.ssh</strong>“生成两个文件，id_esa和id_rsa.pub,右键打开.pub的那个，用notepad++或者txt都行，ctrl+a，ctrl+c复制全部东西<br>        14.回到github官网，点头像，settings,ssh keys，new ssh key，把刚才复制的全部粘贴到Key的文本框里。<br>        ————————————————————————————————–<br>##开始创建blog<br>        1.创建一个文件夹，linux用mkdir,windows就，呵，之后blog都在这个文件夹中，有问题直接删了文件夹就行。<br>        2.“<strong>hexo init</strong>”初始化博客，自己就会clone，不用管他，就是时间有点久<br>        3.用“<strong>hexo s</strong>”来启动本地服务器，可以通过本地localhost:4000来查看默认blog<br>        4.创建新文章，hexo n “博客名字”，会显示新文件在哪里，在source/_post/里<br>        5.然后编辑，可以用vim或者其他什么软件，然后用“<strong>hexo g</strong>”来生成<br>        6.github创建新仓库，仓库名字必须用自己昵称.github.io创建，保存一下地址<br>        7.安装git部署插件 “<strong>cnpm install –save hexo-deployer-git</strong>“<br>        8.设置文件夹下的_config.yml,找到文件底部，deploy，改成“<strong>deploy: type: git repo:仓库地址  branch: master</strong>”，冒号后面有空格<br>        9.输入“<strong>hexo d</strong>”，就可以自动部署到github<br>        10.注意，如果没有跳出来输入密码那可能就是有点问题，要“<strong>git config –global user.email “邮箱地址”</strong>“，“<strong>git config –global user.name “名字”</strong>“<br>        11.用”<strong>git config -l</strong>“，可以用来查看配置信息。</p>
-
+        
       
 
       
@@ -252,7 +249,7 @@
     <a class="close js-modal-close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/12/04/hexo-blog-process/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/12/05/git-study/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -266,18 +263,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/12/05/git-study/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          git study
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/12/03/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Hello World</div>
+    <a href="/2019/12/04/hexo-blog-process/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">hexo blog process</div>
       <i class="icon-circle-right"></i>
     </a>
   
