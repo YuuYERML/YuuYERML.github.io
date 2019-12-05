@@ -233,32 +233,10 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="环境搭建与框架下载"><a href="#环境搭建与框架下载" class="headerlink" title="环境搭建与框架下载"></a>环境搭建与框架下载</h2><pre><code>##### 安装nodejs与hexo与git的链接
-    1.下载nodejs，[nodejs官网](http://www.nodejs.org)
-    2.安装下载，不停点下一步就行，安装完成后会有两部分，nodejs和npm.
-    &lt;!--more--&gt;3.找到cmd，**右键用管理员模式打开**，输入”**node -v**“,查看nodejs版本，输入”**npm -v**“，查看npm版本，查看是否成功安装
-    4.首先借助npm，国内借助cnpm，输入”**npm install -g cnpm --registry=https://registry.npm.taobao.org**“,自动下载
-    5.输入“**cnpm**”，查看是否下载成功cnpm，如果没成功就再重复一遍
-    6.下载hexo,输入“**cnpm install -g hexo-cli**”,自动下载，下载完成后用“**hexo -v**”查看是否成功
-    7.下载git，[git官网](https://git-scm.com/)
-    8.安装下载，不停点下一步就行。
-    9.右键我的电脑，属性，高级系统设置，找到高级，环境变量，选择PATH，新建输入git安装目录下的bin，例如（F:\git\Git\bin）
-    10.打开cmd，可以用git --version来查看git是否安装成功，没成功就再装一遍，没什么问题。
-    11.创建一个blog，哪里都行，然后在文件夹中右键空白，点击Git Bash Here，没有那可能是注册表什么，[百度](https://www.baidu.com)即可
-    12.打开Git Bash Here 输入ssh-keygen -t rsa -C &apos;xxx&apos;,xxx填写你注册github时候的邮箱地址。没github就注册一个，也很容易
-    13.然后应该会在&quot;**C:\Users\HP\.ssh**&quot;生成两个文件，id_esa和id_rsa.pub,右键打开.pub的那个，用notepad++或者txt都行，ctrl+a，ctrl+c复制全部东西
-    14.回到github官网，点头像，settings,ssh keys，new ssh key，把刚才复制的全部粘贴到Key的文本框里。
-    --------------------------------------------------------------------------------------------------</code></pre><h2 id="开始创建blog"><a href="#开始创建blog" class="headerlink" title="开始创建blog"></a>开始创建blog</h2><pre><code>1.创建一个文件夹，linux用mkdir,windows就，呵，之后blog都在这个文件夹中，有问题直接删了文件夹就行。
-2.“**hexo init**”初始化博客，自己就会clone，不用管他，就是时间有点久
-3.用“**hexo s**”来启动本地服务器，可以通过本地localhost:4000来查看默认blog
-4.创建新文章，hexo n “博客名字”，会显示新文件在哪里，在source/_post/里
-5.然后编辑，可以用vim或者其他什么软件，然后用“**hexo g**”来生成
-6.github创建新仓库，仓库名字必须用自己昵称.github.io创建，保存一下地址
-7.安装git部署插件 &quot;**cnpm install --save hexo-deployer-git**&quot;
-8.设置文件夹下的_config.yml,找到文件底部，deploy，改成“**deploy: type: git repo:仓库地址  branch: master**”，冒号后面有空格
-9.输入“**hexo d**”，就可以自动部署到github
-10.注意，如果没有跳出来输入密码那可能就是有点问题，要“**git config --global user.email &quot;邮箱地址&quot;**&quot;，“**git config --global user.name &quot;名字&quot;**&quot;
-11.用”**git config -l**“，可以用来查看配置信息。</code></pre>
+        <h2 id="环境搭建与框架下载"><a href="#环境搭建与框架下载" class="headerlink" title="环境搭建与框架下载"></a>环境搭建与框架下载</h2><h3 id="安装nodejs与hexo与git"><a href="#安装nodejs与hexo与git" class="headerlink" title="安装nodejs与hexo与git"></a>安装nodejs与hexo与git</h3><ol>
+<li>下载nodejs，<a href="https://nodejs.org/en/" target="_blank" rel="noopener">nodejs官网</a></li>
+<li>安装下载，不停点下一步就行，安装完成后会有两部分，nodejs和npm.
+        
       
 
       
