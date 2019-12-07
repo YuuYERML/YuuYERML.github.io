@@ -6,26 +6,28 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>git study | Hexo</title>
+  <title>git study | YuuYERML‘s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
+  <meta name="description" content="##Git学习 初始化Gitgit init:初始化git，创建.git文件">
+<meta property="og:type" content="article">
 <meta property="og:title" content="git study">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;05&#x2F;git-study&#x2F;index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="YuuYERML‘s blog">
+<meta property="og:description" content="##Git学习 初始化Gitgit init:初始化git，创建.git文件">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-05T10:07:07.742Z">
+<meta property="og:updated_time" content="2019-12-06T03:59:05.155Z">
 <meta name="twitter:card" content="summary">
   
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="YuuYERML‘s blog" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" href="https://user-images.githubusercontent.com/43989093/70292523-71c1d980-1819-11ea-8075-65a4fea32042.png">
   
   <link rel="stylesheet" type="text/css" href="/./main.0cf68a.css">
   <style type="text/css">
   
     #container.show {
-      background: linear-gradient(200deg,#a0cfe4,#e8c37e);
+      background: linear-gradient(200deg,#a0cfe4,#000);
     }
   </style>
   
@@ -49,41 +51,40 @@
 		  <h1 class="header-author"><a href="/">YuuYERML</a></h1>
 		</hgroup>
 		
+		<p class="header-subtitle">My blogs</p>
+		
 
 		<nav class="header-menu">
 			<ul>
 			
 				<li><a href="/">主页</a></li>
 	        
-				<li><a href="/tags/%E9%9A%8F%E7%AC%94/">随笔</a></li>
-	        
 			</ul>
+		</nav>
+		<nav>
+			总文章数 3
 		</nav>
 		<nav class="header-smart-menu">
     		
     			
-    			<a q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)" target="_blank" rel="noopener">所有文章</a>
+    			<a q-on="click: openSlider(e, 'innerArchive')" target="_parent" href="javascript:void(0)">所有文章</a>
     			
             
     			
-    			<a q-on="click: openSlider(e, 'friends')" href="javascript:void(0)" target="_blank" rel="noopener">友链</a>
-    			
-            
-    			
-    			<a q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)" target="_blank" rel="noopener">关于我</a>
+    			<a q-on="click: openSlider(e, 'aboutme')" target="_parent" href="javascript:void(0)">关于我</a>
     			
             
 		</nav>
 		<nav class="header-nav">
 			<div class="social">
 				
-					<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+					<a class="github" target="_blank" href="https://github.com" title="github"><i class="icon-github"></i></a>
 		        
 					<a class="weibo" target="_blank" href="#" title="weibo"><i class="icon-weibo"></i></a>
 		        
-					<a class="rss" target="_blank" href="#" title="rss"><i class="icon-rss"></i></a>
+					<a class="qq" target="_blank" href="#" title="qq"><i class="icon-qq"></i></a>
 		        
-					<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+					<a class="bilibili" target="_blank" href="#" title="bilibili"><i class="icon-bilibili"></i></a>
 		        
 			</div>
 		</nav>
@@ -107,9 +108,9 @@
 			  <h1 class="header-author js-header-author">YuuYERML</h1>
 			</hgroup>
 			
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>My blogs<i class="icon icon-quo-right"></i></p>
 			
 			
-				
 			
 				
 			
@@ -118,13 +119,13 @@
 			<nav class="header-nav">
 				<div class="social">
 					
-						<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+						<a class="github" target="_blank" href="https://github.com" title="github"><i class="icon-github"></i></a>
 			        
 						<a class="weibo" target="_blank" href="#" title="weibo"><i class="icon-weibo"></i></a>
 			        
-						<a class="rss" target="_blank" href="#" title="rss"><i class="icon-rss"></i></a>
+						<a class="qq" target="_blank" href="#" title="qq"><i class="icon-qq"></i></a>
 			        
-						<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+						<a class="bilibili" target="_blank" href="#" title="bilibili"><i class="icon-bilibili"></i></a>
 			        
 				</div>
 			</nav>
@@ -133,9 +134,7 @@
 				<ul style="width: 50%">
 				
 				
-					<li style="width: 50%"><a href="/">主页</a></li>
-		        
-					<li style="width: 50%"><a href="/tags/%E9%9A%8F%E7%AC%94/">随笔</a></li>
+					<li style="width: 100%"><a href="/">主页</a></li>
 		        
 				</ul>
 			</nav>
@@ -170,7 +169,38 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>##Git学习</p>
+<h5 id="初始化Git"><a href="#初始化Git" class="headerlink" title="初始化Git"></a>初始化Git</h5><p>git init:初始化git，创建.git文件</p>
+<a id="more"></a>
+<p>工作区←写代码<br>↓git add<br>暂存区←临时存储<br>↓git commit<br>本地库←历史版本</p>
+<h5 id="项目级别的签名"><a href="#项目级别的签名" class="headerlink" title="项目级别的签名"></a>项目级别的签名</h5><p>git config user.name YuuYERML<br>git config user.email xxxxx@qq.com<br>在./.git/config文件内</p>
+<h5 id="用户级别的签名"><a href="#用户级别的签名" class="headerlink" title="用户级别的签名"></a>用户级别的签名</h5><p>git config –global user.name YuuYERML<br>git config –global user.email 951771240@qq.com<br>在~/gitconfig</p>
+<h5 id="查看状态"><a href="#查看状态" class="headerlink" title="查看状态"></a>查看状态</h5><ul>
+<li><p>状态查看</p>
+<p>  git status<br>  查看工作区，暂存区状态</p>
+</li>
+<li><p>添加操作</p>
+<p>  git add [file name]<br>  将工作区的新建/修改添加到暂存区</p>
+</li>
+<li><p>提交操作</p>
+<p>  git commit -m “commit message” [file name]<br>  将暂存区的内容提交到本地库    </p>
+</li>
+<li><p>版本变化</p>
+<p>  git log<br>  查看历史记录，author，签名<br>  date,日期<br>  git log –pretty=oneline<br>  git log –oneline<br>  git reflog<br>  基于索引值操作推荐）<br>  使用^操作<br>  使用~操作</p>
+<h5 id="历史记录操作"><a href="#历史记录操作" class="headerlink" title="历史记录操作"></a>历史记录操作</h5></li>
+<li><p>历史更换一</p>
+<p>  git reflog<br>  git reset –hard 索引值</p>
+</li>
+<li><p>历史更换二</p>
+<p>  git reset –hard HEAD^(这里只能回退)一个^退一步，多个就退多个<br>  git log –online(只能显示之前的历史)<br>  git reset –hard HEAD~n回退n步</p>
+</li>
+<li><p>删除文件找回</p>
+<p>  前提：删除前，文件存在的状态提交到了本地库<br>  操作：git reset –hard [指针位置]<br>  指针位置：历史记录或当前操作</p>
+<h5 id="文件比较"><a href="#文件比较" class="headerlink" title="文件比较"></a>文件比较</h5><p>git diff HEAD 文件名<br>git diff 文件名</p>
+<h5 id="分支创建"><a href="#分支创建" class="headerlink" title="分支创建"></a>分支创建</h5><p>git branch -v 查看<br>git branch 名字  创建分支<br>git checkout 名字  切换分支<br>git</p>
+</li>
+</ul>
+
       
 
       
@@ -183,7 +213,7 @@
             <span class="tooltip-content">
               <span class="tooltip-text">
                 <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>此处不应该有东西<i class="icon icon-quo-right"></i></p>
                   <div class="reward-box">
                     
                     
@@ -285,6 +315,19 @@
         </div>
         
         
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#初始化Git"><span class="toc-number">1.</span> <span class="toc-text">初始化Git</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#项目级别的签名"><span class="toc-number">2.</span> <span class="toc-text">项目级别的签名</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#用户级别的签名"><span class="toc-number">3.</span> <span class="toc-text">用户级别的签名</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#查看状态"><span class="toc-number">4.</span> <span class="toc-text">查看状态</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#历史记录操作"><span class="toc-number">5.</span> <span class="toc-text">历史记录操作</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#文件比较"><span class="toc-number">6.</span> <span class="toc-text">文件比较</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#分支创建"><span class="toc-number">7.</span> <span class="toc-text">分支创建</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
     </div>
 </aside>
 
@@ -329,7 +372,7 @@
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
-		showTags: false
+		showTags: true
 	}
 </script>
 
@@ -352,25 +395,17 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
       
       
     
-      
-      
-      
-    
     
 
     <ul style="width: 70%">
     
     
       
-      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" target="_blank" rel="noopener" q-class="active:innerArchive">所有文章</a></li>
+      <li style="width: 50%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" target="_blank" rel="noopener" q-class="active:innerArchive">所有文章</a></li>
       
         
       
-      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'friends')"><a href="javascript:void(0)" target="_blank" rel="noopener" q-class="active:friends">友链</a></li>
-      
-        
-      
-      <li style="width: 33.333333333333336%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" target="_blank" rel="noopener" q-class="active:aboutme">关于我</a></li>
+      <li style="width: 50%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" target="_blank" rel="noopener" q-class="active:aboutme">关于我</a></li>
       
         
     </ul>
@@ -433,38 +468,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     	</section>
     
 
-    
-    	<section class="tools-section tools-section-friends" q-show="friends">
-  		
-        <ul class="search-ul">
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接1</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接2</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接3</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接4</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接5</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接6</a>
-            </li>
-          
-        </ul>
-  		
-    	</section>
     
 
     
