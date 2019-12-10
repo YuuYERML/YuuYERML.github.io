@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>git study | YuuYERML‘s blog</title>
+  <title>git study | YuuYERML Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="##Git学习 初始化Gitgit init:初始化git，创建.git文件">
 <meta property="og:type" content="article">
 <meta property="og:title" content="git study">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;05&#x2F;git-study&#x2F;index.html">
-<meta property="og:site_name" content="YuuYERML‘s blog">
+<meta property="og:site_name" content="YuuYERML Blog">
 <meta property="og:description" content="##Git学习 初始化Gitgit init:初始化git，创建.git文件">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-06T03:59:05.155Z">
+<meta property="og:updated_time" content="2019-12-09T07:05:26.206Z">
 <meta name="twitter:card" content="summary">
   
-    <link rel="alternative" href="/atom.xml" title="YuuYERML‘s blog" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="YuuYERML Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="https://user-images.githubusercontent.com/43989093/70292523-71c1d980-1819-11ea-8075-65a4fea32042.png">
@@ -48,10 +48,8 @@
 			<img src="https://user-images.githubusercontent.com/43989093/70249417-558d5080-17b7-11ea-998e-9057168143c8.jpg" class="js-avatar">
 		</a>
 		<hgroup>
-		  <h1 class="header-author"><a href="/">YuuYERML</a></h1>
+		  <h1 class="header-author"><a href="/">Yuu YERML</a></h1>
 		</hgroup>
-		
-		<p class="header-subtitle">My blogs</p>
 		
 
 		<nav class="header-menu">
@@ -59,15 +57,19 @@
 			
 				<li><a href="/">主页</a></li>
 	        
+				<li><a href="/tags/%E9%9A%8F%E7%AC%94/">随笔</a></li>
+	        
 			</ul>
 		</nav>
 		<nav>
-			总文章数 3
+			总文章数 4
 		</nav>
 		<nav class="header-smart-menu">
     		
     			
     			<a q-on="click: openSlider(e, 'innerArchive')" target="_parent" href="javascript:void(0)">所有文章</a>
+    			
+            
     			
             
     			
@@ -105,12 +107,12 @@
 				<img src="https://user-images.githubusercontent.com/43989093/70249417-558d5080-17b7-11ea-998e-9057168143c8.jpg" class="js-avatar">
 			</div>
 			<hgroup>
-			  <h1 class="header-author js-header-author">YuuYERML</h1>
+			  <h1 class="header-author js-header-author">Yuu YERML</h1>
 			</hgroup>
 			
-			<p class="header-subtitle"><i class="icon icon-quo-left"></i>My blogs<i class="icon icon-quo-right"></i></p>
 			
 			
+				
 			
 				
 			
@@ -134,7 +136,9 @@
 				<ul style="width: 50%">
 				
 				
-					<li style="width: 100%"><a href="/">主页</a></li>
+					<li style="width: 50%"><a href="/">主页</a></li>
+		        
+					<li style="width: 50%"><a href="/tags/%E9%9A%8F%E7%AC%94/">随笔</a></li>
 		        
 				</ul>
 			</nav>
@@ -197,7 +201,30 @@
 <li><p>删除文件找回</p>
 <p>  前提：删除前，文件存在的状态提交到了本地库<br>  操作：git reset –hard [指针位置]<br>  指针位置：历史记录或当前操作</p>
 <h5 id="文件比较"><a href="#文件比较" class="headerlink" title="文件比较"></a>文件比较</h5><p>git diff HEAD 文件名<br>git diff 文件名</p>
-<h5 id="分支创建"><a href="#分支创建" class="headerlink" title="分支创建"></a>分支创建</h5><p>git branch -v 查看<br>git branch 名字  创建分支<br>git checkout 名字  切换分支<br>git</p>
+<h5 id="分支创建"><a href="#分支创建" class="headerlink" title="分支创建"></a>分支创建</h5><p>git branch -v 查看<br>git branch 名字  创建分支<br>git checkout 名字  切换分支<br>切换到要接受修改的分支，然后使用merge，吧二合并到一<br>git checkout 分支二<br>git merge 分支一</p>
+<h5 id="Git分支管理"><a href="#Git分支管理" class="headerlink" title="Git分支管理"></a>Git分支管理</h5><p>98(版本)root commit    ←    34(版本)    ←    HEAD指向master，master指向f3，另外还有一个testing指向f3(版本)，  切换分支就是HEAD指向的master换成testing指针，分叉是f3创建了两个版本，master指向一个，testing指向一个</p>
+<h5 id="Git本地库远程库"><a href="#Git本地库远程库" class="headerlink" title="Git本地库远程库"></a>Git本地库远程库</h5></li>
+<li><p>检查连接</p>
+<p>  git remote -v</p>
+</li>
+<li><p>创建连接</p>
+<p>  git remote add 想改的名字 你的远程库地址，如（$ git remote add origin <a href="https://github.com/YuuYERML/testgit.git）" target="_blank" rel="noopener">https://github.com/YuuYERML/testgit.git）</a><br>  git remote -v</p>
+</li>
+<li><p>Push</p>
+<p>  git push 你改的名字 你想要的分支，如（git push origin master）</p>
+</li>
+<li><p>Clone</p>
+<p>  git clone 远程库名字，clone有三个效果</p>
+</li>
+</ul>
+<ol>
+<li>完整把远程库下载到本地</li>
+<li>替我们创建origin地址别名</li>
+<li>初始化本地库</li>
+</ol>
+<ul>
+<li><p>Pull</p>
+<p>  pull是fetch+merge，抓去+合并<br>  git fetch origin master,只是抓去，并不修改工作区文件<br>  具体在git checkout origin/master,<br>  git checkout master<br>  git merge origin/master<br>  如果有冲突那就打开文件吧特殊符号删了，然后修改成想要的，然后添加提交<br>  git add 文件名<br>  提交时候要git commit -m “”，不需要加文件名了</p>
 </li>
 </ul>
 
@@ -293,6 +320,15 @@
   
 <nav id="article-nav">
   
+    <a href="/2019/12/10/html-css/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          html&amp;css
+        
+      </div>
+    </a>
+  
   
     <a href="/2019/12/04/hexo-blog-process/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">hexo blog process</div>
@@ -322,7 +358,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#初始化Git"><span class="toc-number">1.</span> <span class="toc-text">初始化Git</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#项目级别的签名"><span class="toc-number">2.</span> <span class="toc-text">项目级别的签名</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#用户级别的签名"><span class="toc-number">3.</span> <span class="toc-text">用户级别的签名</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#查看状态"><span class="toc-number">4.</span> <span class="toc-text">查看状态</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#历史记录操作"><span class="toc-number">5.</span> <span class="toc-text">历史记录操作</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#文件比较"><span class="toc-number">6.</span> <span class="toc-text">文件比较</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#分支创建"><span class="toc-number">7.</span> <span class="toc-text">分支创建</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#初始化Git"><span class="toc-number">1.</span> <span class="toc-text">初始化Git</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#项目级别的签名"><span class="toc-number">2.</span> <span class="toc-text">项目级别的签名</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#用户级别的签名"><span class="toc-number">3.</span> <span class="toc-text">用户级别的签名</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#查看状态"><span class="toc-number">4.</span> <span class="toc-text">查看状态</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#历史记录操作"><span class="toc-number">5.</span> <span class="toc-text">历史记录操作</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#文件比较"><span class="toc-number">6.</span> <span class="toc-text">文件比较</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#分支创建"><span class="toc-number">7.</span> <span class="toc-text">分支创建</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Git分支管理"><span class="toc-number">8.</span> <span class="toc-text">Git分支管理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Git本地库远程库"><span class="toc-number">9.</span> <span class="toc-text">Git本地库远程库</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -351,7 +387,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2019 YuuYERML
+    		&copy; 2019 Yuu YERML
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -392,6 +428,8 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
       
     
       
+    
+      
       
       
     
@@ -402,6 +440,8 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
       
       <li style="width: 50%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" target="_blank" rel="noopener" q-class="active:innerArchive">所有文章</a></li>
+      
+        
       
         
       
