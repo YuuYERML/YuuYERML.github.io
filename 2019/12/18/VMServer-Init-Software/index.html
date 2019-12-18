@@ -6,16 +6,16 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>git study | YuuYERML Blog</title>
+  <title>Server Init Software | YuuYERML Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Git学习初始化Gitgit init:初始化git，创建.git文件">
+  <meta name="description" content="虚拟机centOS安装前提安装了VMware或者其他虚拟机，以及下载CentOS镜像iso文件">
 <meta property="og:type" content="article">
-<meta property="og:title" content="git study">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;05&#x2F;git-study&#x2F;index.html">
+<meta property="og:title" content="Server Init Software">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;18&#x2F;VMServer-Init-Software&#x2F;index.html">
 <meta property="og:site_name" content="YuuYERML Blog">
-<meta property="og:description" content="Git学习初始化Gitgit init:初始化git，创建.git文件">
+<meta property="og:description" content="虚拟机centOS安装前提安装了VMware或者其他虚拟机，以及下载CentOS镜像iso文件">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-10T03:36:03.142Z">
+<meta property="og:updated_time" content="2019-12-18T08:45:51.464Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="YuuYERML Blog" type="application/atom+xml">
@@ -151,79 +151,77 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-git-study" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-VMServer-Init-Software" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      git study
+      Server Init Software
     </h1>
   
 
         
-        <a href="/2019/12/05/git-study/" class="archive-article-date">
-  	<time datetime="2019-12-05T10:07:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-05</time>
+        <a href="/2019/12/18/VMServer-Init-Software/" class="archive-article-date">
+  	<time datetime="2019-12-18T07:20:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-18</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Git学习"><a href="#Git学习" class="headerlink" title="Git学习"></a>Git学习</h2><h5 id="初始化Git"><a href="#初始化Git" class="headerlink" title="初始化Git"></a>初始化Git</h5><p>git init:初始化git，创建.git文件</p>
+        <h1 id="虚拟机centOS安装"><a href="#虚拟机centOS安装" class="headerlink" title="虚拟机centOS安装"></a>虚拟机centOS安装</h1><h3 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h3><p>安装了VMware或者其他虚拟机，以及下载CentOS镜像iso文件</p>
 <a id="more"></a>
-<p>工作区←写代码<br>↓git add<br>暂存区←临时存储<br>↓git commit<br>本地库←历史版本</p>
-<h5 id="项目级别的签名"><a href="#项目级别的签名" class="headerlink" title="项目级别的签名"></a>项目级别的签名</h5><p>git config user.name YuuYERML<br>git config user.email xxxxx@qq.com<br>在./.git/config文件内</p>
-<h5 id="用户级别的签名"><a href="#用户级别的签名" class="headerlink" title="用户级别的签名"></a>用户级别的签名</h5><p>git config –global user.name YuuYERML<br>git config –global user.email 951771240@qq.com<br>在~/gitconfig</p>
-<h5 id="查看状态"><a href="#查看状态" class="headerlink" title="查看状态"></a>查看状态</h5><ul>
-<li><p>状态查看</p>
-<p>  git status<br>  查看工作区，暂存区状态</p>
-</li>
-<li><p>添加操作</p>
-<p>  git add [file name]<br>  将工作区的新建/修改添加到暂存区</p>
-</li>
-<li><p>提交操作</p>
-<p>  git commit -m “commit message” [file name]<br>  将暂存区的内容提交到本地库    </p>
-</li>
-<li><p>版本变化</p>
-<p>  git log<br>  查看历史记录，author，签名<br>  date,日期<br>  git log –pretty=oneline<br>  git log –oneline<br>  git reflog<br>  基于索引值操作推荐）<br>  使用^操作<br>  使用~操作</p>
-<h5 id="历史记录操作"><a href="#历史记录操作" class="headerlink" title="历史记录操作"></a>历史记录操作</h5></li>
-<li><p>历史更换一</p>
-<p>  git reflog<br>  git reset –hard 索引值</p>
-</li>
-<li><p>历史更换二</p>
-<p>  git reset –hard HEAD^(这里只能回退)一个^退一步，多个就退多个<br>  git log –online(只能显示之前的历史)<br>  git reset –hard HEAD~n回退n步</p>
-</li>
-<li><p>删除文件找回</p>
-<p>  前提：删除前，文件存在的状态提交到了本地库<br>  操作：git reset –hard [指针位置]<br>  指针位置：历史记录或当前操作</p>
-<h5 id="文件比较"><a href="#文件比较" class="headerlink" title="文件比较"></a>文件比较</h5><p>git diff HEAD 文件名<br>git diff 文件名</p>
-<h5 id="分支创建"><a href="#分支创建" class="headerlink" title="分支创建"></a>分支创建</h5><p>git branch -v 查看<br>git branch 名字  创建分支<br>git checkout 名字  切换分支<br>切换到要接受修改的分支，然后使用merge，吧二合并到一<br>git checkout 分支二<br>git merge 分支一</p>
-<h5 id="Git分支管理"><a href="#Git分支管理" class="headerlink" title="Git分支管理"></a>Git分支管理</h5><p>98(版本)root commit    ←    34(版本)    ←    HEAD指向master，master指向f3，另外还有一个testing指向f3(版本)，  切换分支就是HEAD指向的master换成testing指针，分叉是f3创建了两个版本，master指向一个，testing指向一个</p>
-<h5 id="Git本地库远程库"><a href="#Git本地库远程库" class="headerlink" title="Git本地库远程库"></a>Git本地库远程库</h5></li>
-<li><p>检查连接</p>
-<p>  git remote -v</p>
-</li>
-<li><p>创建连接</p>
-<p>  git remote add 想改的名字 你的远程库地址，如（$ git remote add origin <a href="https://github.com/YuuYERML/testgit.git）" target="_blank" rel="noopener">https://github.com/YuuYERML/testgit.git）</a><br>  git remote -v</p>
-</li>
-<li><p>Push</p>
-<p>  git push 你改的名字 你想要的分支，如（git push origin master）</p>
-</li>
-<li><p>Clone</p>
-<p>  git clone 远程库名字，clone有三个效果</p>
-</li>
-</ul>
+<h3 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h3><p>一路回车，到可视化页面，选中文，或者选什么随便，日期设置，键盘不用管，语言中文，安装源不用换，软件选择可以选择GNOME桌面，好看</p>
+<h3 id="进入主界面"><a href="#进入主界面" class="headerlink" title="进入主界面"></a>进入主界面</h3><p>先创建用户，如果不是root那就创一个，不是那就不用了，如果不能sudo那就su切换root用户在/etc/sudoers里root ALL什么一行下面加上root用自己名字替换的，后面照抄</p>
+<h3 id="创建用户"><a href="#创建用户" class="headerlink" title="创建用户"></a>创建用户</h3><p>root用户直接用很危险，比如什么时候输入个rm -rf /*不就完了嘛，所以要新建用户</p>
 <ol>
-<li>完整把远程库下载到本地</li>
-<li>替我们创建origin地址别名</li>
-<li>初始化本地库</li>
+<li>创建用户\：<strong><code>useradd yuu</code></strong></li>
+<li>设置密码\： <strong><code>passwd yuu</code></strong>,然后输入密码，然后再输入一次确认密码</li>
+<li>添加sudoers：在root用户下输入<strong>vim /etc/sudoers</strong>然后下面找到<code>root    ALL=(ALL)     ALL</code>，在下一行加入<code>yuu    ALL=(ALL)     ALL</code></li>
+<li>vim用法，学，就要写东西前都要先点i进入插入模式，退出都要先esc退出插入模式，然后输入：wq，后面有个！加不加都行<h3 id="部署环境"><a href="#部署环境" class="headerlink" title="部署环境"></a>部署环境</h3><h5 id="基本要下载的东西都部署在一个你知道的文件夹下比较好"><a href="#基本要下载的东西都部署在一个你知道的文件夹下比较好" class="headerlink" title="基本要下载的东西都部署在一个你知道的文件夹下比较好"></a>基本要下载的东西都部署在一个你知道的文件夹下比较好</h5></li>
 </ol>
+<p>+. <strong><a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank" rel="noopener">Java</a></strong></p>
 <ul>
-<li><p>Pull</p>
-<p>  pull是fetch+merge，抓去+合并<br>  git fetch origin master,只是抓去，并不修改工作区文件<br>  具体在git checkout origin/master,<br>  git checkout master<br>  git merge origin/master<br>  如果有冲突那就打开文件吧特殊符号删了，然后修改成想要的，然后添加提交<br>  git add 文件名<br>  提交时候要git commit -m “”，不需要加文件名了</p>
-</li>
+<li>在usr目录下创建文件夹 <strong>cd /usr</strong>然后<strong>mkdir java &amp;&amp; cd java</strong></li>
+<li>下载：<strong><code>wget --no-check-certificate --no-cookies --header &quot;Cookie: oraclelicense=accept-securebackup-cookie&quot; https://download.oracle.com/otn-pub/java/jdk/13.0.1+9/cec27d702aa74d5a8630c65ae61e4305/jdk-13.0.1_linux-x64_bin.tar.gz</code></strong></li>
+<li>解压并改名：<strong>tar zxvf jdk(按tab可以自动补全)</strong>，修改名字mv 老名字 新名字，如sudo mv jdk-13.0.1 jdk</li>
+<li>修改环境变量： <strong>sudo vim /etc/profile</strong>，在文件中最下面加入下面几行<strong><code>export JAVA_HOME=jdk的目录(回车)export CLASSPATH=$JAVA_HOME/lib/（回车）export PATH=$JAVA_HOME/bin:$PATH（回车）export PATH JAVA_HOME CLASSPATH</code></strong></li>
+<li>重新加载配置文件 <strong>source /etc/profile</strong></li>
+<li>查看java安装成否 <strong>java -version</strong></li>
 </ul>
+<hr>
+<p>+. <strong><a href="http://tomcat.apache.org/" target="_blank" rel="noopener">tomcat</a></strong></p>
+<ul>
+<li>在usr目录下创建文件夹 <strong>cd /usr</strong>然后<strong>mkdir tomcat &amp;&amp; cd tomcat</strong></li>
+<li>下载：<strong><code>wget http://mirror.bit.edu.cn/apache/tomcat/tomcat-9/v9.0.29/bin/apache-tomcat-9.0.29.tar.gz</code></strong></li>
+<li>解压并改名： <strong>tar -xf apache-tomcat</strong>,修改名字</li>
+<li>操作：启动在bin文件中，<strong>./startup.bat开启,./shutdown.bat关闭</strong></li>
+</ul>
+<hr>
+<p>+. <strong><a href="https://dev.mysql.com/downloads/repo/yum/" target="_blank" rel="noopener">mysql</a></strong></p>
+<ul>
+<li>在usr目录下创建文件夹 <strong>cd /usr</strong>然后<strong>mkdir mysql &amp;&amp; cd mysql</strong></li>
+<li>下载：<strong><code>wget https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm</code></strong></li>
+<li>本地安装源: <strong><code>yum -y localinstall mysql80-community-release-el7-1.noarch.rpm</code></strong></li>
+<li>查看并下载： <strong>yum repolist all | grep mysql</strong>，看到之后用<strong>yum install mysql-community-server.x86_64</strong></li>
+<li>数据库操作： <strong>service mysql start(可以换成stop或者restart)</strong>，刷新权限<strong>flush privileges;</strong>，登陆<strong>mysql -u root -p密码</strong></li>
+<li>跳过验证修改root密码: <strong>vim /etc/my.cnf</strong>,添加一句<strong>skip-grant-tables</strong></li>
+<li>修改root密码：登陆<strong>mysql</strong>，选数据库<strong>use mysql</strong>,sql语句：updata mysql.user set authentication_string=password(‘新设置的密码’)where user=’root’;,刷新权限</li>
+</ul>
+<hr>
+<p>+. <strong><a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git</a></strong></p>
+<ul>
+<li>在usr目录下创建文件夹 <strong>cd /usr</strong>然后<strong>mkdir git &amp;&amp; cd git</strong></li>
+<li>查看是否存在和下载前置：检查<strong>git –version</strong>,安装前置<strong>yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-devel</strong>和** yum install gcc-c++ perl-ExtUtils-MakeMaker**</li>
+<li>下载：<strong><code>wget https://github.com/git/git/archive/v2.24.1.tar.gz</code></strong></li>
+<li>解压：<strong>tar -xvzf soft git-</strong></li>
+<li>进入到文件夹，编译安装，<strong>cd git..</strong>，执行make和configure，<strong>./configure</strong>和<strong>make&amp;&amp;make install</strong></li>
+<li>增加环境变量，<strong>export PATH=$PATH:/usr/git/bin</strong></li>
+<li>检查git：<strong>git –version</strong></li>
+</ul>
+<hr>
 
       
 
@@ -303,7 +301,7 @@
     <a class="close js-modal-close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/12/05/git-study/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/12/18/VMServer-Init-Software/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -317,18 +315,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/12/10/html-css/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          html&amp;css
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/12/04/hexo-blog-process/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">hexo blog process</div>
+    <a href="/2019/12/10/JSbase/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JSbase</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -355,7 +344,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Git学习"><span class="toc-number">1.</span> <span class="toc-text">Git学习</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#初始化Git"><span class="toc-number">1.0.0.1.</span> <span class="toc-text">初始化Git</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#项目级别的签名"><span class="toc-number">1.0.0.2.</span> <span class="toc-text">项目级别的签名</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#用户级别的签名"><span class="toc-number">1.0.0.3.</span> <span class="toc-text">用户级别的签名</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#查看状态"><span class="toc-number">1.0.0.4.</span> <span class="toc-text">查看状态</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#历史记录操作"><span class="toc-number">1.0.0.5.</span> <span class="toc-text">历史记录操作</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#文件比较"><span class="toc-number">1.0.0.6.</span> <span class="toc-text">文件比较</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#分支创建"><span class="toc-number">1.0.0.7.</span> <span class="toc-text">分支创建</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Git分支管理"><span class="toc-number">1.0.0.8.</span> <span class="toc-text">Git分支管理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Git本地库远程库"><span class="toc-number">1.0.0.9.</span> <span class="toc-text">Git本地库远程库</span></a></li></ol></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#虚拟机centOS安装"><span class="toc-number">1.</span> <span class="toc-text">虚拟机centOS安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#前提"><span class="toc-number">1.0.1.</span> <span class="toc-text">前提</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开始安装"><span class="toc-number">1.0.2.</span> <span class="toc-text">开始安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进入主界面"><span class="toc-number">1.0.3.</span> <span class="toc-text">进入主界面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建用户"><span class="toc-number">1.0.4.</span> <span class="toc-text">创建用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#部署环境"><span class="toc-number">1.0.5.</span> <span class="toc-text">部署环境</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#基本要下载的东西都部署在一个你知道的文件夹下比较好"><span class="toc-number">1.0.5.0.1.</span> <span class="toc-text">基本要下载的东西都部署在一个你知道的文件夹下比较好</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
