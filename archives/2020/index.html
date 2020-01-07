@@ -6,16 +6,13 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>hexo blog process | YuuYERML Blog</title>
+  <title>Archives: 2020 | YuuYERML Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="环境搭建与框架下载安装nodejs与hexo与git 下载nodejs，nodejs官网 安装下载，不停点下一步就行，安装完成后会有两部分，nodejs和npm.">
-<meta property="og:type" content="article">
-<meta property="og:title" content="hexo blog process">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;hexo-blog-process&#x2F;index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="YuuYERML Blog">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;archives&#x2F;2020&#x2F;index.html">
 <meta property="og:site_name" content="YuuYERML Blog">
-<meta property="og:description" content="环境搭建与框架下载安装nodejs与hexo与git 下载nodejs，nodejs官网 安装下载，不停点下一步就行，安装完成后会有两部分，nodejs和npm.">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-06T02:45:38.717Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="YuuYERML Blog" type="application/atom+xml">
@@ -151,207 +148,49 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-hexo-blog-process" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      hexo blog process
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2020" class="archive-year">2020</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2020/01/07/%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96/" class="archive-article-date">
+  	<time datetime="2020-01-07T06:15:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-07</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2020/01/07/%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96/">代码优化</a>
     </h1>
   
 
-        
-        <a href="/2019/12/04/hexo-blog-process/" class="archive-article-date">
-  	<time datetime="2019-12-04T07:41:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="环境搭建与框架下载"><a href="#环境搭建与框架下载" class="headerlink" title="环境搭建与框架下载"></a>环境搭建与框架下载</h2><h3 id="安装nodejs与hexo与git"><a href="#安装nodejs与hexo与git" class="headerlink" title="安装nodejs与hexo与git"></a>安装nodejs与hexo与git</h3><ol>
-<li>下载nodejs，<a href="https://nodejs.org/en/" target="_blank" rel="noopener">nodejs官网</a></li>
-<li>安装下载，不停点下一步就行，安装完成后会有两部分，nodejs和npm.<a id="more"></a></li>
-<li>找到cmd，右键用管理员模式打开，输入”node -v“,查看nodejs版本，输入”npm -v“，查看npm版本，查看是否成功安装</li>
-<li>首先借助npm，国内借助cnpm，输入”npm install -g cnpm –registry=”<a href="https://registry.npm.taobao.org“,自动下载" target="_blank" rel="noopener">https://registry.npm.taobao.org“,自动下载</a></li>
-<li>输入“cnpm”，查看是否下载成功cnpm，如果没成功就再重复一遍</li>
-<li>下载hexo,输入“cnpm install -g hexo-cli”,自动下载，下载完成后用“hexo -v”查看是否成功</li>
-<li>下载git，<a href="https://git-scm.com" target="_blank" rel="noopener">git官网</a></li>
-<li>安装下载，不停点下一步就行。</li>
-<li>右键我的电脑，属性，高级系统设置，找到高级，环境变量，选择PATH，新建输入git安装目录下的bin，例如（F:\git\Git\bin）</li>
-<li>打开cmd，可以用git –version来查看git是否安装成功，没成功就再装一遍，没什么问题。</li>
-<li>创建一个blog，哪里都行，然后在文件夹中右键空白，点击Git Bash Here，没有那可能是注册表什么，百度即可</li>
-<li>打开Git Bash Here 输入ssh-keygen -t rsa -C ‘xxx’,xxx填写你注册github时候的邮箱地址。没github就注册一个，也很容易</li>
-<li>然后应该会在”C:\Users\HP.ssh”生成两个文件，id_esa和id_rsa.pub,右键打开.pub的那个，用notepad++或者txt都行，ctrl+a，ctrl+c复制全部东西</li>
-<li>回到github官网，点头像，settings,ssh keys，new ssh key，把刚才复制的全部粘贴到Key的文本框里。</li>
-</ol>
-<hr>
-<h2 id="开始创建blog"><a href="#开始创建blog" class="headerlink" title="开始创建blog"></a>开始创建blog</h2><h3 id="使用hexo创建blog"><a href="#使用hexo创建blog" class="headerlink" title="使用hexo创建blog"></a>使用hexo创建blog</h3><ol>
-<li>创建一个文件夹，linux用mkdir,windows就，呵，之后blog都在这个文件夹中，有问题直接删了文件夹就行。</li>
-<li>“<strong>hexo init</strong>”初始化博客，自己就会clone，不用管他，就是时间有点久</li>
-<li>用“<strong>hexo s</strong>”来启动本地服务器，可以通过本地localhost:4000来查看默认blog</li>
-<li>创建新文章，hexo n “博客名字”，会显示新文件在哪里，在source/_post/里</li>
-<li>然后编辑，可以用vim或者其他什么软件，然后用“<strong>hexo g</strong>”来生成</li>
-<li>github创建新仓库，仓库名字必须用自己昵称.github.io创建，保存一下地址</li>
-<li>安装git部署插件 “<strong>cnpm install –save hexo-deployer-git</strong>“</li>
-<li>设置文件夹下的_config.yml,找到文件底部，deploy，改成“<strong>deploy: type: git repo:仓库地址  branch: master</strong>”，冒号后面有空格</li>
-<li>输入“<strong>hexo d</strong>”，就可以自动部署到github</li>
-<li>注意，如果没有跳出来输入密码那可能就是有点问题，要“<strong>git config –global user.email “邮箱地址”</strong>“，“<strong>git config –global user.name “名字”</strong>“</li>
-<li>用”<strong>git config -l</strong>“，可以用来查看配置信息。</li>
-</ol>
+        <div class="article-info info-on-right">
+          
+          
 
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" target="_blank" rel="noopener" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>这里没东西，别看了<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
         </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" target="_blank" rel="noopener" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
-        </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/12/04/hexo-blog-process/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2019/12/05/git-study/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          git study
-        
-      </div>
-    </a>
   
   
-    <a href="/2019/12/03/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Hello World</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-        <div class="toc-container tooltip-left">
-            <i class="icon-font icon-category"></i>
-            <div class="tooltip tooltip-east">
-                <span class="tooltip-item">
-                </span>
-                <span class="tooltip-content">
-                    <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#环境搭建与框架下载"><span class="toc-number">1.</span> <span class="toc-text">环境搭建与框架下载</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装nodejs与hexo与git"><span class="toc-number">1.1.</span> <span class="toc-text">安装nodejs与hexo与git</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开始创建blog"><span class="toc-number">2.</span> <span class="toc-text">开始创建blog</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用hexo创建blog"><span class="toc-number">2.1.</span> <span class="toc-text">使用hexo创建blog</span></a></li></ol></li></ol>
-                    </div>
-                </span>
-            </div>
-        </div>
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -374,8 +213,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

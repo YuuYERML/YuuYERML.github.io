@@ -59,7 +59,7 @@
 			</ul>
 		</nav>
 		<nav>
-			总文章数 8
+			总文章数 9
 		</nav>
 		<nav class="header-smart-menu">
     		
@@ -149,6 +149,604 @@
           </div>
           <div id="js-content" class="content-ll">
             
+  
+    <article id="post-代码优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/01/07/%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96/">代码优化</a>
+    </h1>
+  
+
+        
+        <a href="/2020/01/07/%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96/" class="archive-article-date">
+  	<time datetime="2020-01-07T06:15:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <a id="more"></a>
+
+<p>此内容从羊哥公众号学习而来，理解后会按自己理解方式会再写</p>
+<p><a href="https://www.codesheep.cn/" target="_blank" rel="noopener">羊哥网站</a></p>
+<p><img src="https://www.codesheep.cn/css/images/codesheep_logo_heart.jpg" alt="img"></p>
+<h1 id="Spring-IoC"><a href="#Spring-IoC" class="headerlink" title="Spring IoC"></a>Spring IoC</h1><ul>
+<li>广义的IoC（Inversion of Control）控制反转，实现有依赖查找（DL)和依赖注入（DI).</li>
+<li>DI有Set注入和构造器注入，DL已经被抛弃，DI是Spring使用方式</li>
+</ul>
+<p>Spring的IoC支持以下功能</p>
+<ul>
+<li>依赖注入</li>
+<li>依赖检查</li>
+<li>自动装配</li>
+<li>支持集合</li>
+<li>指定初始化方法和销毁方法</li>
+<li>支持回调某些方法（但是需要实现 Spring 接口，略有侵入）</li>
+</ul>
+<p>其中最重要的事依赖注入，从XML的配置上说，即ref标签。对应Spring的<strong>RuntimeBeanReference</strong>对象。对于IoC来说，最重要的就是容器，容器管理<strong>Bean</strong>的生命周期，控制Bean的依赖注入</p>
+<blockquote>
+<p>那么，Spring如何设计容器？</p>
+</blockquote>
+<p>Spring 作者 Rod Johnson 设计了两个接口用以表示容器。</p>
+<ul>
+<li><strong>BeanFactory</strong></li>
+<li><strong>ApplicationContext</strong></li>
+</ul>
+<p><code>BeanFactory</code> 粗暴简单，可以理解为就是个 HashMap，Key 是 BeanName，Value 是 Bean 实例。通常只提供注册（put），获取（get）这两个功能。我们可以称之为 “<strong>低级容器</strong>”。</p>
+<p><code>ApplicationContext</code> 可以称之为 “<strong>高级容器</strong>”。因为他比 BeanFactory 多了更多的功能。他继承了多个接口。因此具备了更多的功能。例如资源的获取，支持多种消息（例如 JSP tag 的支持），对 BeanFactory 多了工具级别的支持等待。所以你看他的名字，已经不是 BeanFactory 之类的工厂了，而是 “应用上下文”， 代表着整个大容器的所有功能。该接口定义了一个 refresh 方法，此方法是所有阅读 Spring 源码的人的最熟悉的方法，用于刷新整个容器，即重新加载/刷新所有的 bean。</p>
+<p>当然，除了这两个大接口，还有其他的辅助接口。</p>
+<p>为了更直观的展示 “<strong>低级容器</strong>” 和 “<strong>高级容器</strong>” 的关系，这里通过常用的 <code>ClassPathXmlApplicationContext</code> 类，来展示整个容器的层级 UML 关系：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/uUI5MuKH05tkwZ1UlIV2iaZWNCxibHBibynHcrmiaibjXDQQtEBQ92hraeNk79dswc2nWnoMz6W53c6ibKBDf16awRlg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<blockquote>
+<p>有点复杂？先不要慌，来解释一下</p>
+</blockquote>
+<ul>
+<li>最上面的 BeanFactory 知道吧？就不讲了</li>
+<li>下面的 3 个绿色的，都是功能扩展接口，不展开讲</li>
+<li>看下面的隶属 <code>ApplicationContext</code> 粉红色的 “高级容器”，依赖着 “低级容器”，这里说的是依赖，不是继承哦。他依赖着 “低级容器” 的 <code>getBean</code> 功能。而高级容器有更多的功能：支持不同的信息源头，可以访问文件资源，支持应用事件（Observer 模式）。通常用户看到的就是 “高级容器”。但 BeanFactory 也非常够用啦！</li>
+<li>左边灰色区域的是 “低级容器”， 只负载加载 Bean，获取 Bean。容器其他的高级功能是没有的。例如上图画的 <code>refresh</code> 刷新 Bean 工厂所有配置。生命周期事件回调等。</li>
+</ul>
+<p>好，解释了低级容器和高级容器，我们可以看看一个 IoC 启动过程是什么样子的。说白了，就是 <code>ClassPathXmlApplicationContext</code> 这个类，在启动时，都做了啥。（由于我这是 interface21 的代码，肯定和 Spring 4.x 系列不同）。</p>
+<p>下图是 <code>ClassPathXmlApplicationContext</code> 的构造过程，实际就是 Spring IoC 的初始化过程。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/uUI5MuKH05tkwZ1UlIV2iaZWNCxibHBibyn5ibTzD3g1ibicNaDVNDaFC4ia8AaBr6UmRgsTJFYP7UluMZu812HSXWVnw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<blockquote>
+<p>注意，这里为了理解方便，有所简化</p>
+</blockquote>
+<p>这里再用文字来描述这个过程：</p>
+<ol>
+<li>用户构造 <code>ClassPathXmlApplicationContext</code>（简称 CPAC）</li>
+<li>CPAC 首先访问了 “抽象高级容器” 的 final 的 <code>refresh</code> 方法，这个方法是模板方法。所以要回调子类（低级容器）的 <code>refreshBeanFactory</code> 方法，这个方法的作用是使用低级容器加载所有 <code>BeanDefinition</code> 和 <code>Properties</code>到容器中。</li>
+<li>低级容器加载成功后，高级容器开始处理一些回调，例如 Bean 后置处理器。回调 <code>setBeanFactory</code> 方法。或者注册监听器等，发布事件，实例化单例 Bean 等等功能，这些功能，随着 Spring 的不断升级，功能越来越多，很多人在这里迷失了方向 ：）。</li>
+</ol>
+<p>简单说就是：</p>
+<ol>
+<li>低级容器 加载配置文件（从 XML，数据库，Applet），并解析成 <code>BeanDefinition</code> 到低级容器中。</li>
+<li>加载成功后，高级容器启动高级功能，例如接口回调，监听器，自动实例化单例，发布事件等等功能。</li>
+</ol>
+<p>所以，一定要把 “低级容器” 和“高级容器” 的区别弄清楚。不能一叶障目不见泰山。</p>
+<p>好，当我们创建好容器，就会使用 <code>getBean</code> 方法，获取 Bean，而 <code>getBean</code> 的流程如下：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/uUI5MuKH05tkwZ1UlIV2iaZWNCxibHBibynZ1jvAzZaeo9kGDUaB0Yn8e2ZZEa132IJSXAibDUTQHwFmJWarb1HiaQg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>从图中可以看出， <code>getBean</code> 的操作都是在低级容器里操作的。其中有个递归操作，这个是什么意思呢？</p>
+<p><strong>假设</strong> ：当 BeanA 依赖着 BeanB，而这个 BeanA 在加载的时候，其配置的 <code>ref=“Bean_B”</code> 在解析的时候只是一个占位符，被放入了 BeanA 的属性集合中，当调用 <code>getBean</code> 时，需要真正 BeanB 注入到 BeanA 内部时，就需要从容器中获取这个 Bean_B，因此产生了递归。</p>
+<p>为什么不是在加载的时候，就直接注入呢？因为加载的顺序不同，很可能 BeanA 依赖的 BeanB 还没有加载好，也就无法从容器中获取，你不能要求用户把 Bean 的加载顺序排列好，这是不人道的。</p>
+<p>所以，Spring 将其分为了 <strong>2 个步骤</strong>：</p>
+<ol>
+<li>加载所有的 Bean 配置成 <code>BeanDefinition</code> 到容器中，如果 Bean 有依赖关系，则使用占位符暂时代替。</li>
+<li>然后，在调用 <code>getBean</code> 的时候，进行真正的依赖注入，即如果碰到了属性是 <code>ref</code> 的（占位符），那么就从容器里获取这个 Bean，然后注入到实例中 —— 称之为依赖注入。</li>
+</ol>
+<blockquote>
+<p>可以看到，依赖注入实际上，只需要 “低级容器” 就可以实现！</p>
+</blockquote>
+<p><strong>这就是 IoC！</strong></p>
+<hr>
+<p> <strong>总  结</strong> </p>
+<p>说了这么多，不知道你有没有理解Spring IoC？这里小结一下：</p>
+<p>IoC 在 Spring 里，只需要低级容器就可以实现，<strong>2个步骤</strong>：</p>
+<ul>
+<li>加载配置文件，解析成 <code>BeanDefinition</code> 放在 <code>Map</code> 里</li>
+<li>调用 <code>getBean</code> 的时候，从 <code>BeanDefinition</code> 所属的 Map 里，拿出 Class 对象进行实例化，同时，如果有依赖关系，将递归调用 <code>getBean</code> 方法 —— 完成依赖注入</li>
+</ul>
+<blockquote>
+<p>上面就是 Spring 低级容器（BeanFactory）的 IoC</p>
+</blockquote>
+<p>至于高级容器 <code>ApplicationContext</code>，他包含了低级容器的功能，当他执行 <code>refresh</code> 模板方法的时候，将刷新整个容器的 Bean。同时其作为高级容器，包含了太多的功能。一句话，他不仅仅是 IoC。他支持不同信息源头，支持 <code>BeanFactory</code> 工具类，支持层级容器，支持访问文件资源，支持事件发布通知，支持接口回调等等。</p>
+<p>可以预见，随着 Spring 的不断发展，高级容器的功能会越来越多。</p>
+<h1 id="Git使用手册"><a href="#Git使用手册" class="headerlink" title="Git使用手册"></a>Git使用手册</h1><p> <strong>一、创建与合并分支</strong> </p>
+<p><strong>1、 从master分支创建dev分支并切换到dev分支</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git checkout master</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">git checkout -b dev</span></pre></td></tr></table></figure>
+
+<p>其中，git checkout -b dev 等价于:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git branch dev</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">git checkout dev</span></pre></td></tr></table></figure>
+
+<p>（1）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git branch</span></pre></td></tr></table></figure>
+
+<p>查看本地当前的分支，分支前面带“*”表示当前分支，剩下的分支表示本地有的分支。</p>
+<p>（2）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git  branch  -a</span></pre></td></tr></table></figure>
+
+<p>查看远程全部的分支，白色的表示本地有的，红色的表示本地没有，仅在远程存在。</p>
+<p><strong>2、修改代码、提交代码（当前的操作是在dev分支上进行）</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git add a.html</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">git commit -m &quot;提交文件a.html&quot;</span></pre></td></tr></table></figure>
+
+<p><strong>3、分支合并(将dev合并到master)</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git checkout master</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">git merge dev</span></pre></td></tr></table></figure>
+
+<p><strong>4、合并完成后，删除dev分支.(删除dev分支时，注意我们当前所在的分支不能是dev分支)</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git branch -d dev</span></pre></td></tr></table></figure>
+
+<p><strong>5、删除后，查看分支(此时看不到dev分支了)</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git branch</span></pre></td></tr></table></figure>
+
+<p><strong>6、总结 ：工作中经常从master创建新的分支，具体操作如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">master创建新分支：</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">git checkout master</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">git checkout -b  issues1234  &#x2F;&#x2F; 从master分支创建issues1234分支</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">git push origin issues1234</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">git add ..</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">git commit -m &quot;***&quot;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">git push origin issues1234</span></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：将本地分支branch1推到远端的branch2操作步骤：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git push origin branch1:branch2</span></pre></td></tr></table></figure>
+
+<p><strong>7、删除分支：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git branch -D   issues1234  &#x2F;&#x2F; 本地强制删除分支issues1234</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">git push origin  :issues1234  &#x2F;&#x2F; 推到远程</span></pre></td></tr></table></figure>
+
+<hr>
+<p> <strong>二、解决冲突</strong> </p>
+<p><strong>1、发生冲突的文件</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEADCreating a new branch is quick &amp; simple.&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;Creating a new branch is quick AND simple.&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature1</span></pre></td></tr></table></figure>
+
+<p>其中，git使用 <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;，=======，&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>标记文件中自己和别人产生冲突的部分。</p>
+<p>在 <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;，=======</code>之间为自己的代码；=======，&gt;&gt;&gt;&gt;&gt;&gt;&gt;之间为别人的代码。</p>
+<p>如果保留自己的代码，将别人的代码删掉即可。</p>
+<p><strong>2、冲突解决后提交</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git status</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">git add ***</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">git commit -m &quot;fix conflict&quot;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">git push origin 分支名</span></pre></td></tr></table></figure>
+
+<hr>
+<p> <strong>三、Bug分支</strong> </p>
+<p><strong>1、储藏更改:将当前更改的代码储藏起来，等以后恢复使用</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git stash</span></pre></td></tr></table></figure>
+
+<p><strong>2、恢复储藏的代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git stash pop &#x2F;&#x2F; 恢复的同时把stash内容删掉</span></pre></td></tr></table></figure>
+
+<p>或者<img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzojLzqlTxblgiaSHLoIicRgtktKaFlWibDRu1m4cmQhicv6ysibp5IUJv2yRKvUXhvxGmt5Zrlj9hJ4hvQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 通过 git stash list，查看本地所有的stash,如果我要恢复第一个就执行：git stash apply stash@&#123;0&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">git stash apply  &#x2F;&#x2F; 恢复stash，但是stash内容并不删除</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">git stash drop &#x2F;&#x2F; 在上面操作的基础上，以此来删除stash</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">注： git stash list &#x2F;&#x2F; 查看全部的stash列表</span></pre></td></tr></table></figure>
+
+<p><strong>3、将stash空间清空</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git stash clear</span></pre></td></tr></table></figure>
+
+<p><strong>4、git stash pop 和 git stash apply 区别</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">原来git stash pop stash@&#123;id&#125;命令会在执行后将对应的stash id 从stash list里删除，而 git stash apply stash@&#123;id&#125; 命令则会继续保存stash id。</span></pre></td></tr></table></figure>
+
+<hr>
+<p> <strong>四、版本回退</strong> </p>
+<p><strong>1、回退至上一个版本</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git reset --hard HEAD</span></pre></td></tr></table></figure>
+
+<p><strong>2、回退至指定版本</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git reset --hard  版本号</span></pre></td></tr></table></figure>
+
+<p><strong>3、查看以往版本号(本地的commit)</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git reflog</span></pre></td></tr></table></figure>
+
+<p><strong>4、查看各版本号及信息(所有的commit：本地commit + 其他同事的commit)</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git log</span></pre></td></tr></table></figure>
+
+<hr>
+<p> <strong>五、撤销修改</strong> </p>
+<p><strong>1、撤销修改</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git  checkout -- a.html</span></pre></td></tr></table></figure>
+
+<blockquote>
+<p>分两种情况分析：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">①： 还没有执行 git add 操作，执行上面的操作后，会恢复到和版本库中一模一样的版本状态。</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">②： 执行了git add ，还没执行 git commit ,再执行上面的操作后，会恢复到git add 结束后的状态</span></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注：一旦执行了git commit -m “*”，就不能再使用上面的命令回退。</p>
+</blockquote>
+<p><strong>2、撤销新建文件</strong></p>
+<p>比如新建一个aa.html页面，并未执行git add ,即没有被git追踪，此时如果你想撤销新建动作，可执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git clean -f ..&#x2F;aa.html</span></pre></td></tr></table></figure>
+
+<p><strong>3、撤销新建文件夹</strong></p>
+<p>比如新建一个文件夹”demo”，并未执行git add ,即没有被git追踪，此时如果你想撤销新建动作，可执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git clean -df .&#x2F;demo</span></pre></td></tr></table></figure>
+
+<hr>
+<p> <strong>六、对已push版本进行回退</strong> </p>
+<p><strong>1、第一步：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git reset --hard 版本号 &#x2F;&#x2F; 本地回退到指定的版本</span></pre></td></tr></table></figure>
+
+<p><strong>2、第二步：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git push  -f origin dev    &#x2F;&#x2F;将远程的也回退到指定版本</span></pre></td></tr></table></figure>
+
+<hr>
+<p> <strong>七、本地同步远程删除的分支</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git fetch origin -p  &#x2F;&#x2F; 用来清除已经没有远程信息的分支，这样git branch -a 就不会拉取远程已经删除的分支了</span></pre></td></tr></table></figure>
+
+<hr>
+<p> <strong>八、删掉未与远程分支对应的本地分支</strong> </p>
+<p>从gitlab上看不到的分支在本地可以通过git branch -a 查到，删掉没有与远程分支对应的本地分支：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git fetch -p</span></pre></td></tr></table></figure>
+
+<hr>
+<p> <strong>九、查看远程库与本地分支的信息</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git remote show origin</span></pre></td></tr></table></figure>
+
+<hr>
+<p> <strong>十、标签管理</strong> </p>
+<p><strong>1、给当前分支最新commit打标签</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git tag v1.0.0</span></pre></td></tr></table></figure>
+
+<p><strong>2、比如现在周五，要给周一某个commit打标签，应执行以下步骤：</strong></p>
+<p>（1）、查看log日志，找到相应的commit版本号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git log --pretty&#x3D;oneline --abbrev-commit</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 显示如下commit，比如我想在 &quot;34372b05&quot;这个commit打标签44d2e20b fix bug34372b05 fix bug29554931 fix bug</span></pre></td></tr></table></figure>
+
+<p>（2）、给指定的commit打标签</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git tag v1.0.0 34372b05</span></pre></td></tr></table></figure>
+
+<p>（3）、创建的标签只存在本地，推至远程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git push origin v1.0.0</span></pre></td></tr></table></figure>
+
+<p>（4）、一次性推送未推至远程的本地标签</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git push origin --tags</span></pre></td></tr></table></figure>
+
+<p>（5）、查询所有标签</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git tag</span></pre></td></tr></table></figure>
+
+<p>（6）、查询标签详细信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git show v1.0.0</span></pre></td></tr></table></figure>
+
+<p>（7）、删除本地标签</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git tag -d v1.0.0</span></pre></td></tr></table></figure>
+
+<p>（8）、删除远程标签</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 先从本地删除git tag -d v1.0.0</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 然后从远程删除git push origin :refs&#x2F;tags&#x2F;v1.0.0</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 最后可以在gitlab上查看是否真正的删除了标签</span></pre></td></tr></table></figure>
+
+<p><strong>3、创建带有说明的标签，用-a指定标签名，-m指定说明文字</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; git  tag  -a  版本号  -m  说明信息  commit版本号git tag -a v1.0.0 -m &quot;version 1.0.0 released&quot; 34372b05(commit版本号)     </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 查看标签详细信息git show v1.0.0</span></pre></td></tr></table></figure>
+
+<h1 id="数据库的Join"><a href="#数据库的Join" class="headerlink" title="数据库的Join"></a>数据库的Join</h1><p> <strong>有个困扰</strong> </p>
+<p>说到SQL，很多人可能用了挺久，但依然有个问题一直困扰着，那就是 <code>left join</code>、 <code>join</code>、 <code>right join</code>和 <code>inner join</code>等等各种 <code>join</code>的区别。网上搜，最常见的就是一张图解图，如下：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzrpEumZSqdXsoZDWO8aHvRfknEibWUvxWuOV8oCibKqpy8VmnLpb3s5m0wT6jzREmsYYLiaibxMmrakOw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>接下来就来实际自己动手实验，彻底搞懂图中的含义。</p>
+<p>首先，先来建两张表，第一张表命名为 <code>kemu</code>，第二张表命名为 <code>score</code>：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzrpEumZSqdXsoZDWO8aHvRf4S1M6ml7Q0DTFnpOiawx8rgcIuPke6P6N2ibxe9022yyyvAIWps3dYyg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzrpEumZSqdXsoZDWO8aHvRfrtuATzgR3hrdibXJibd8PfiawlXGnGrsFpVs8bev8r1lgzzN2Oib6v4qfg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="clipboard.png"></p>
+<hr>
+<p> <strong>left join</strong> </p>
+<p>顾名思义，就是“左连接”，表1左连接表2，以左为主，表示以表1为主，关联上表2的数据，查出来的结果显示左边的所有数据，然后右边显示的是和左边有交集部分的数据。如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">select   *from   kemuleft join score on kemu.id &#x3D; score.id</span></pre></td></tr></table></figure>
+
+<p>结果集：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzrpEumZSqdXsoZDWO8aHvRfaLdQSzNYibbC0lGTic5tg9Y1M0GES0p4VSwN3LZticsJE7RYK2FpLDFnA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzrpEumZSqdXsoZDWO8aHvRfr64xA6wsKXOtw6awXgw201cD4Sl7LBsQcsHnPauMU6Tud2fGEa5aRQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="clipboard.png"></p>
+<hr>
+<p> <strong>right join</strong> </p>
+<p>“右连接”，表1右连接表2，以右为主，表示以表2为主，关联查询表1的数据，查出表2所有数据以及表1和表2有交集的数据，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">select   *from   kemuright join score on kemu.id &#x3D; score.id</span></pre></td></tr></table></figure>
+
+<p>结果集：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzrpEumZSqdXsoZDWO8aHvRf2tyJcpeYqhCojRa3KJ9oP0Cs4nNd1GMpXOHh8gk5rNSXOUv11XRtFg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzrpEumZSqdXsoZDWO8aHvRfdia1aPLtF0M6AA7UmMayLedS1jiahvQAJv7GBNUvp5GwLMibu8xe76ibXw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="clipboard.png"></p>
+<hr>
+<p> <strong>join（inner join）</strong> </p>
+<p>join，其实就是“inner join”，为了简写才写成join，两个是表示一个的，内连接，表示以两个表的交集为主，查出来是两个表有交集的部分，其余没有关联就不额外显示出来，这个用的情况也是挺多的，如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">select   *from   kemujoin score on kemu.id &#x3D; score.id</span></pre></td></tr></table></figure>
+
+<p>结果集：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzrpEumZSqdXsoZDWO8aHvRffkia977yVMLicGMF7V7kXPqdsib1PSjfTjMk1kxRc7sM4c5ch7XGiby1MA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzrpEumZSqdXsoZDWO8aHvRfQlfAKw7gHzxtXicdI4J1I4QwaDJYgAAomoKXIKlKibibcH6aypf8icGV8Q/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="clipboard.png"></p>
+<p>以后对于这三者应该再也不模糊了吧！</p>
+<h1 id="If-else优化"><a href="#If-else优化" class="headerlink" title="If/else优化"></a>If/else优化</h1><p> <strong>哎，曾几何时</strong> </p>
+<p>想当年，其实我也特别钟情于 <code>if/else</code>连环写法，上来就是一顿<strong>SAO操作</strong>，比如<strong>举个好理解的简单栗子</strong>：</p>
+<p>一般来说我们正常的后台管理系统都有所谓的角色的概念，不同管理员权限不一样，能够行使的操作也不一样，比如：</p>
+<ul>
+<li>系统管理员（ <code>ROLE_ROOT_ADMIN</code>）：有 <code>A</code>操作权限</li>
+<li>订单管理员（ <code>ROLE_ORDER_ADMIN</code>）：有 <code>B</code>操作权限</li>
+<li>普通用户（ <code>ROLE_NORMAL</code>）：有 <code>C</code>操作权限</li>
+</ul>
+<p>比如一个用户进来，我们需要根据不同用户的角色来判断其有哪些行为，这时候<strong>SAO代码</strong>出现了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">public class JudgeRole &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    public String judge( String roleName ) &#123;        String result &#x3D; &quot;&quot;;        if (roleName.equals(&quot;ROLE_ROOT_ADMIN&quot;)) &#123; &#x2F;&#x2F; 系统管理员有A权限            result &#x3D; &quot;ROLE_ROOT_ADMIN: &quot; + &quot;has AAA permission&quot;;        &#125; else if ( roleName.equals(&quot;ROLE_ORDER_ADMIN&quot;) ) &#123; &#x2F;&#x2F; 订单管理员有B权限            result &#x3D; &quot;ROLE_ORDER_ADMIN: &quot; + &quot;has BBB permission&quot;;        &#125; else if ( roleName.equals(&quot;ROLE_NORMAL&quot;) ) &#123; &#x2F;&#x2F; 普通用户有C权限            result &#x3D; &quot;ROLE_NORMAL: &quot; + &quot;has CCC permission&quot;;        &#125; else &#123;            result &#x3D; &quot;XXX&quot;;        &#125;        return result;    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
+
+<p>这样当系统里有<strong>几十个角色</strong>时，那几十个 <code>if/else</code>嵌套可以说是非常酸爽了…… 这样<strong>一来</strong>非常不优雅，别人阅读起来很费劲；<strong>二来</strong>则是以后如果再复杂一点，或者想要再加条件的话<strong>不好扩展</strong>；而且代码一改，以前的老功能肯定还得重测，岂不疯了……</p>
+<p>所以，如果在不看下文的情况下，你一般会如何去对付这些令人头痛的if/else语句呢？</p>
+<p>当然有人会说用 <code>switch/case</code>来写是否会优雅一些呢？答案是：<strong>毛区别都没有</strong>！</p>
+<blockquote>
+<p>接下来简单讲几种改进方式，别再 <code>if/else</code>走天下了</p>
+</blockquote>
+<hr>
+<p> <strong>有枚举为啥不用</strong> </p>
+<blockquote>
+<p>什么角色能干什么事，这很明显有一个对应关系，所以学过的枚举为啥不用呢？</p>
+</blockquote>
+<p>首先定义一个公用接口 <code>RoleOperation</code>，表示不同角色所能做的操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">public interface RoleOperation &#123;    String op();  &#x2F;&#x2F; 表示某个角色可以做哪些op操作&#125;</span></pre></td></tr></table></figure>
+
+<p>接下来我们将不同角色的情况全部交由枚举类来做，定义一个不同角色有不同权限的枚举类 <code>RoleEnum</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">public enum RoleEnum implements RoleOperation &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    &#x2F;&#x2F; 系统管理员(有A操作权限)    ROLE_ROOT_ADMIN &#123;        @Override        public String op() &#123;            return &quot;ROLE_ROOT_ADMIN:&quot; + &quot; has AAA permission&quot;;        &#125;    &#125;,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    &#x2F;&#x2F; 订单管理员(有B操作权限)    ROLE_ORDER_ADMIN &#123;        @Override        public String op() &#123;            return &quot;ROLE_ORDER_ADMIN:&quot; + &quot; has BBB permission&quot;;        &#125;    &#125;,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    &#x2F;&#x2F; 普通用户(有C操作权限)    ROLE_NORMAL &#123;        @Override        public String op() &#123;            return &quot;ROLE_NORMAL:&quot; + &quot; has CCC permission&quot;;        &#125;    &#125;;&#125;</span></pre></td></tr></table></figure>
+
+<p>接下来调用就变得异常简单了，一行代码就行了， <code>if/else</code>也灰飞烟灭了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">public class JudgeRole &#123;    public String judge( String roleName ) &#123;        &#x2F;&#x2F; 一行代码搞定！之前的if&#x2F;else没了！        return RoleEnum.valueOf(roleName).op();    &#125;&#125;</span></pre></td></tr></table></figure>
+
+<p>而且这样一来，以后假如我想扩充条件，只需要去枚举类中加代码即可，而不是去改以前的代码，这岂不很稳！</p>
+<blockquote>
+<p>除了用枚举来消除 <code>if/else</code>，工厂模式也可以实现</p>
+</blockquote>
+<hr>
+<p> <strong>有工厂模式为啥不用</strong> </p>
+<p>不同分支做不同的事情，很明显就提供了使用工厂模式的契机，我们只需要将不同情况单独定义好，然后去工厂类里面<strong>聚合</strong>即可。</p>
+<p>首先，针对不同的角色，单独定义其业务类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 系统管理员(有A操作权限)public class RootAdminRole implements RoleOperation &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    private String roleName;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    public RootAdminRole( String roleName ) &#123;        this.roleName &#x3D; roleName;    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    @Override    public String op() &#123;        return roleName + &quot; has AAA permission&quot;;    &#125;&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 订单管理员(有B操作权限)public class OrderAdminRole implements RoleOperation &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    private String roleName;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    public OrderAdminRole( String roleName ) &#123;        this.roleName &#x3D; roleName;    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    @Override    public String op() &#123;        return roleName + &quot; has BBB permission&quot;;    &#125;&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 普通用户(有C操作权限)public class NormalRole implements RoleOperation &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">    private String roleName;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">    public NormalRole( String roleName ) &#123;        this.roleName &#x3D; roleName;    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">    @Override    public String op() &#123;        return roleName + &quot; has CCC permission&quot;;    &#125;&#125;</span></pre></td></tr></table></figure>
+
+<p>接下来再写一个<strong>工厂类 <code>RoleFactory</code></strong>对上面不同角色进行聚合：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">public class RoleFactory &#123;    static Map&lt;String, RoleOperation&gt; roleOperationMap &#x3D; new HashMap&lt;&gt;();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    &#x2F;&#x2F; 在静态块中先把初始化工作全部做完    static &#123;        roleOperationMap.put( &quot;ROLE_ROOT_ADMIN&quot;, new RootAdminRole(&quot;ROLE_ROOT_ADMIN&quot;) );        roleOperationMap.put( &quot;ROLE_ORDER_ADMIN&quot;, new OrderAdminRole(&quot;ROLE_ORDER_ADMIN&quot;) );        roleOperationMap.put( &quot;ROLE_NORMAL&quot;, new NormalRole(&quot;ROLE_NORMAL&quot;) );    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    public static RoleOperation getOp( String roleName ) &#123;        return roleOperationMap.get( roleName );    &#125;&#125;</span></pre></td></tr></table></figure>
+
+<p>接下来借助上面这个工厂，业务代码调用也只需一行代码， <code>if/else</code>同样被消除了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">public class JudgeRole &#123;    public String judge( String roleName ) &#123;        &#x2F;&#x2F; 一行代码搞定！之前的 if&#x2F;else也没了！        return RoleFactory.getOp(roleName).op();    &#125;&#125;</span></pre></td></tr></table></figure>
+
+<p>这样的话以后想扩展条件也很容易，只需要增加新代码，而不需要动以前的业务代码，非常符合<strong>“开闭原则”</strong>。</p>
+<blockquote>
+<p>来，我们接着来，除了工厂模式，策略模式也不妨试一试</p>
+</blockquote>
+<hr>
+<p> <strong>有策略模式为啥不用</strong> </p>
+<p>策略模式和工厂模式写起来其实区别也不大！</p>
+<p>在上面工厂模式代码的基础上，按照策略模式的指导思想，我们也来创建一个所谓的<strong>策略上下文类</strong>，这里命名为 <code>RoleContext</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">public class RoleContext &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    &#x2F;&#x2F; 可更换的策略，传入不同的策略对象，业务即相应变化    private RoleOperation operation; </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    public RoleContext( RoleOperation operation ) &#123;        this.operation &#x3D; operation;    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    public String execute() &#123;        return operation.op();    &#125;&#125;</span></pre></td></tr></table></figure>
+
+<p>很明显上面传入的参数 <code>operation</code>就是表示不同的<strong>“策略”</strong>。我们在业务代码里传入不同的角色，即可得到不同的操作结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JudgeRole</span> </span>&#123;    <span class="function"><span class="keyword">public</span> String <span class="title">judge</span><span class="params">( RoleOperation roleOperation )</span> </span>&#123;        RoleContext roleContext = <span class="keyword">new</span> RoleContext( roleOperation );        <span class="keyword">return</span> roleContext.execute();    &#125;&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">( String[] args )</span> </span>&#123;    JudgeRole judgeRole = <span class="keyword">new</span> JudgeRole();    String result1 = judgeRole.judge(<span class="keyword">new</span> RootAdminRole(<span class="string">"ROLE_ROOT_ADMIN"</span>));    System.out.println( result1 );    String result2 = judgeRole.judge(<span class="keyword">new</span> OrderAdminRole(<span class="string">"ROLE_ORDER_ADMIN"</span>));    System.out.println( result2 );    String result3 = judgeRole.judge(<span class="keyword">new</span> NormalRole(<span class="string">"ROLE_NORMAL"</span>));    System.out.println( result3 );&#125;</span></pre></td></tr></table></figure>
+
+<hr>
+<p> <strong>共  勉</strong> </p>
+<p>好了，先讲到这里吧，本文仅仅是抛砖引玉，使用了一个极其简单的示例来打了个样，然而其思想可以广泛地应用于实际复杂的业务和场景，思想真的很重要！写代码前还是得多思考一番，考虑是否有更具可扩展性的写法！</p>
+<h1 id="Date优化"><a href="#Date优化" class="headerlink" title="Date优化"></a>Date优化</h1><p> <strong>为啥会有这篇文章</strong> </p>
+<p>最近接手了一个别人的老项目，拿到代码，导入IDEA的那一瞬间，我哭出了声 . . .</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzqnuiaMzfNIG9n52WUoMoiagpnOlyqSicwPDiaNBdbyD4RXO0ajicoztQwicjRg4eGaXFq2g3nDblgsFIog/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>我瞥了一眼代码，就知道这次肯定遇到了屎山！因为我看到了这种代码：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzqnuiaMzfNIG9n52WUoMoiagpFqweiaS3tCUnPENsKsNPZAHiaO5GoKicAyfOlOeokKvougdA7S5fMicV7g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>我擦，这都什么年代了，怎么还在用 <code>Date</code>来处理和表示时间！</p>
+<p>完了完了 . . .</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzqnuiaMzfNIG9n52WUoMoiagpuWpLy4aTvL8l0dcNFmZcsoR8wfH5vSCgknTDQD1PNUibzZRg2OpDr0Q/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<hr>
+<p> <strong>为啥Date遭嫌弃了</strong> </p>
+<p>别的先不说，我们先来看几个关于 <code>Date</code>用法的例子，这玩意真的好用吗？</p>
+<p><strong>一、我想新建一个表示”此刻”的日期，打印出来：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">Date rightNow &#x3D; new Date();System.out.println( &quot;当前时刻：&quot; + rightNow );System.out.println( &quot;当前年份：&quot; + rightNow.getYear() );System.out.println( &quot;当前月份：&quot; + rightNow.getMonth() );</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">输出结果为：&#x2F;&#x2F; 当前时刻：Fri Dec 13 21:46:34 CST 2019&#x2F;&#x2F; 当前年份：119&#x2F;&#x2F; 当前月份：11</span></pre></td></tr></table></figure>
+
+<ul>
+<li>第一行：这打印结果你第一眼能看明白？可读性忒差了</li>
+<li>第二行：今天是2019年，你给我返回个119，没法读</li>
+<li>第三行：现在是12月份，你给我返回个11，这也没法读</li>
+</ul>
+<p><strong>二、假如我再想构造一个**</strong>指定年、月、日<strong>**的时间，我尝试这么去做：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">Date beforeDate &#x3D; new Date(2019,12,12);</span></pre></td></tr></table></figure>
+
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzqnuiaMzfNIG9n52WUoMoiagpmVSPTs0qGUVlicCIzxRot4So6Zvk2jZL6vU579jMsicmy1BvYbKrlicVw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>你看到啥了，连构造函数都<strong>被弃用</strong>了！</p>
+<p>你可以再仔细瞅瞅，其实 <code>Date</code>里的很多方法现在都<strong>已经弃用</strong>了！</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzqnuiaMzfNIG9n52WUoMoiagplTlL3icpVMDAIXKgy4GRxaib92Rq6xWKElCJAlUeibbrcJCTSibia8Iia14g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>都这样了，你项目还敢用这个吗？你醒醒吧！</p>
+<p><img src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" alt="img"></p>
+<hr>
+<p> <strong>LocalDateTime不香吗？</strong> </p>
+<p>自 <code>Java8</code>开始， <code>JDK</code>中其实就增加了一系列表示日期和时间的新类，最典型的就是 <code>LocalDateTime</code>。直言不讳，这玩意的出现就是为了干掉之前 <code>JDK</code>版本中的 <code>Date</code>老哥！</p>
+<p>同样，我们也先来感受一下用法！</p>
+<p><strong>一、获取当前此刻的时间</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">LocalDateTime rightNow &#x3D; LocalDateTime.now();System.out.println( &quot;当前时刻：&quot; + rightNow );System.out.println( &quot;当前年份：&quot; + rightNow.getYear() );System.out.println( &quot;当前月份：&quot; + rightNow.getMonth() );System.out.println( &quot;当前日份：&quot; + rightNow.getDayOfMonth() );System.out.println( &quot;当前时：&quot; + rightNow.getHour() );System.out.println( &quot;当前分：&quot; + rightNow.getMinute() );System.out.println( &quot;当前秒：&quot; + rightNow.getSecond() );</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 输出结果：当前时刻：2019-12-13T22:05:26.779当前年份：2019当前月份：DECEMBER当前日份：13当前时：22当前分：5当前秒：26</span></pre></td></tr></table></figure>
+
+<p>干得漂亮！</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzqnuiaMzfNIG9n52WUoMoiagpOVaktib0jwMib8yhDaqC0A9BaMAQLKztg4OXbiaZg3TY7VBuoFQ1UJP4Q/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p><strong>二、构造一个</strong>指定年、月、日<strong>的时间：</strong></p>
+<p>比如，想构造：<code>2019年10月12月12日9时21分32秒</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">LocalDateTime beforeDate &#x3D; LocalDateTime.of(2019, Month.DECEMBER, 12, 9, 21, 32);</span></pre></td></tr></table></figure>
+
+<p>没毛病！</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzqnuiaMzfNIG9n52WUoMoiagpPX1P3chuRjCDvaLstYrjSP003psUHl7SHWwfb9JeCzeHtic1nEXVLxQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p><strong>三、修改日期</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">LocalDateTime rightNow &#x3D; LocalDateTime.now(); </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">rightNow &#x3D; rightNow.minusYears( 2 );  &#x2F;&#x2F; 减少 2 年rightNow &#x3D; rightNow.plusMonths( 3 );  &#x2F;&#x2F; 增加 3 个月</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">rightNow &#x3D; rightNow.withYear( 2008 ); &#x2F;&#x2F; 直接修改年份到2008年rightNow &#x3D; rightNow.withHour( 13 );   &#x2F;&#x2F; 直接修改小时到13时</span></pre></td></tr></table></figure>
+
+<p>够灵活！</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzqnuiaMzfNIG9n52WUoMoiagprh2iaaT4vDcHricKXElThpymiaJETZ6DXlUzkI7jpN5QiazRLppVlCGVmQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p><strong>四、格式化日期</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">LocalDateTime rightNow &#x3D; LocalDateTime.now();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">String result1 &#x3D; rightNow.format( DateTimeFormatter.ISO_DATE );String result2 &#x3D; rightNow.format( DateTimeFormatter.BASIC_ISO_DATE );String result3 &#x3D; rightNow.format( DateTimeFormatter.ofPattern(&quot;yyyy&#x2F;MM&#x2F;dd&quot;) );</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">System.out.println(&quot;格式化后的日期(基本样式一举例)：&quot; + result1);System.out.println(&quot;格式化后的日期(基本样式二举例)：&quot; + result2);System.out.println(&quot;格式化后的日期(自定义样式举例)：&quot; + result3);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 输出结果：格式化后的日期(基本样式一举例)：2019-12-13格式化后的日期(基本样式二举例)：20191213格式化后的日期(自定义样式举例)：2019&#x2F;12&#x2F;13</span></pre></td></tr></table></figure>
+
+<p>我无话可说，漂亮</p>
+<p><strong>五、时间反解析</strong></p>
+<p>给你一个陌生的字符串，你可以按照你需要的格式把时间给反解出来</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">LocalDateTime time &#x3D; LocalDateTime.parse(&quot;2002--01--02 11:21&quot;,DateTimeFormatter.ofPattern(&quot;yyyy--MM--dd HH:mm&quot;));System.out.println(&quot;字符串反解析后的时间为：&quot; + time);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 输出：字符串反解析后的时间为：2002-01-02T11:21</span></pre></td></tr></table></figure>
+
+<p>tql！</p>
+<p>零零散散举了这么些例子，我想 <code>LocalDateTime</code>怎么地也不输 <code>Date</code>吧！</p>
+<hr>
+<p> <strong>线程安全性问题！</strong> </p>
+<p>其实上面讲来讲去只讲了两者在用法上的差别，这其实倒还好，并不致命，可是接下来要讨论的<strong>线程安全性问题</strong>才是致命的！</p>
+<p>其实以前我们惯用的 <code>Date</code>时间类是可变类，这就意味着在多线程环境下对共享 <code>Date</code>变量进行操作时，必须<strong>由程序员自己来保证线程安全</strong>！否则极有可能翻车。</p>
+<p>而自 <code>Java8</code>开始推出的 <code>LocalDateTime</code>却是线程安全的，开发人员不用再考虑并发问题，这点我们从 <code>LocalDateTime</code>的官方源码中即可看出：</p>
+<p><img src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" alt="img"></p>
+<p>不说别的，就光一句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">This class is immutable and thread-safe.  （不可变、线程安全！）</span></pre></td></tr></table></figure>
+
+<p>你就没有任何理由不用 <code>LocalDateTime</code>！</p>
+<hr>
+<p> <strong>日期格式化的选择</strong> </p>
+<p>大家除了惯用 <code>Date</code>来表示时间之外，还有一个用于和 <code>Date</code>连用的 <code>SimpleDateFormat</code> 时间格式化类大家可能也戒不掉了!</p>
+<p><code>SimpleDateFormat</code>最主要的致命问题也是在于它本身<strong>并不线程安全</strong>，这在它的源码注释里已然告知过了：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzqnuiaMzfNIG9n52WUoMoiagpPFmj3icSfNRZO93pCOuzicqCartyHEKc0Lo2jn1rbROGuDYX7wWLN2pw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>那取而代之，我们现在改用什么呢？其实在前文已经用到啦，那就是了 <code>DateTimeFormatter</code>了，他也是线程安全的：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzqnuiaMzfNIG9n52WUoMoiagpZwT0bKt65rQjjcwdXgATFNJosXSsrHp2ucP30lmC9SERy2Gg97Y1gA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<hr>
+<p> <strong>小声BB</strong> </p>
+<p>好了，说了这么多，如果你项目里还在使用 <code>Date</code>或者 <code>SimpleDateFormat</code>的话，答应我，二话别说，赶快全部偷偷去改掉，快！速度！跑步前进！</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzqnuiaMzfNIG9n52WUoMoiagpTEBDYJfI3KpX5f8ozn8cvRxibopoPLj9rh2wM30bRFx4EBbZroz3DAQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<h1 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h1><p> <strong>场景还原</strong> </p>
+<p><strong>简单业务场景模拟：</strong></p>
+<p>假如你现在在做一个成绩录入系统，你愉快地用<strong>Spring Boot框架</strong>写了一个后台接口，用于接收前台浏览器传过来的 <code>Student</code>对象，并插入后台数据库。</p>
+<p>我们将传入的 <code>Student</code>对象定义为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">public class Student &#123;    private String name;    &#x2F;&#x2F; 姓名    private Integer score;  &#x2F;&#x2F; 考试分数（满分100分）    private String mobile;  &#x2F;&#x2F; 电话号码（11位）&#125;</span></pre></td></tr></table></figure>
+
+<p>然后写一个<strong>Post请求</strong>的后台接口，来接收网页端传过来的 <code>Student</code>对象：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">@RestControllerpublic class TestController &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    @Autowired    private StudentService studentService;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    @PostMapping(&quot;&#x2F;add&quot;)    public String addStudent( @RequestBody Student student ) &#123;        studentService.addStudent( student ); &#x2F;&#x2F; 将student对象存入数据库        return &quot;SUCCESS&quot;;    &#125;&#125;</span></pre></td></tr></table></figure>
+
+<p>此时我想你一定看出来了上面这段<strong>代码的漏洞</strong>，因为我们并没有对传入的 <code>Student</code>对象做任何<strong>数据校验</strong>，比如：</p>
+<p><code>Student</code>对象里三个字段的某一个忘传了，为 <code>null</code>怎么办？<code>Student</code>的 <code>score</code>分数，假如写错了，写成 <code>101</code>分怎么办？<code>Student</code>的 <code>mobile</code>11位手机号码，假如填错了，多写了一位怎么办？…等等</p>
+<p>这些数据虽然在前端页面一般会做校验，但我们作为一个<strong>严谨且良心</strong>的后端开发工程师，我们肯定要对传入的每一项数据做<strong>严格的校验</strong>，所以我们应该怎么写？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">@PostMapping(&quot;&#x2F;add&quot;)public String addStudent( @RequestBody Student student ) &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    if( student &#x3D;&#x3D; null )        return &quot;传入的Student对象为null，请传值&quot;;    if( student.getName()&#x3D;&#x3D;null || &quot;&quot;.equals(student.getName()) )        return &quot;传入的学生姓名为空，请传值&quot;;    if( student.getScore()&#x3D;&#x3D;null )        return &quot;传入的学生成绩为null，请传值&quot;;    if( (student.getScore()&lt;0) || (student.getScore()&gt;100) )        return &quot;传入的学生成绩有误，分数应该在0~100之间&quot;;    if( student.getMobile()&#x3D;&#x3D;null || &quot;&quot;.equals(student.getMobile()) )        return &quot;传入的学生电话号码为空，请传值&quot;;    if( student.getMobile().length()!&#x3D;11 )        return &quot;传入的学生电话号码长度有误，应为11位&quot;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    studentService.addStudent( student ); &#x2F;&#x2F; 将student对象存入MySQL数据库    return &quot;SUCCESS&quot;;&#125;</span></pre></td></tr></table></figure>
+
+<p>写是写完了，就是感觉<strong>手有点酸</strong>，并且<strong>心有点累</strong>，这个 <code>Student</code>对象倒还好，毕竟内部仅3个字段，假如一个复杂的对象有30个字段怎么办？简直不敢想象！</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzr1wjoePznKKsVVsfolIIFQD5hxz7Rme4TJGJFSw8N94xw2DRUulAPdge3iaLAVfa1vvEcZk3OiaDvg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<hr>
+<p> <strong>神注解加持！</strong> </p>
+<p>其实Spring框架很早版本开始，就通过<strong>注解的方式</strong>，来方便地为我们提供了各项交互<strong>数据的校验</strong>工作，比如上面的例子，我们只需要在传入的 <code>Student</code>实体类的字段中加入对应注解即可方便的解决问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">public class Student &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    @NotNull(message &#x3D; &quot;传入的姓名为null，请传值&quot;)    @NotEmpty(message &#x3D; &quot;传入的姓名为空字符串，请传值&quot;)    private String name;    &#x2F;&#x2F; 姓名</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    @NotNull(message &#x3D; &quot;传入的分数为null，请传值&quot;)    @Min(value &#x3D; 0,message &#x3D; &quot;传入的学生成绩有误，分数应该在0~100之间&quot;)    @Max(value &#x3D; 100,message &#x3D; &quot;传入的学生成绩有误，分数应该在0~100之间&quot;)    private Integer score;  &#x2F;&#x2F; 分数</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    @NotNull(message &#x3D; &quot;传入的电话为null，请传值&quot;)    @NotEmpty(message &#x3D; &quot;传入的电话为空字符串，请传值&quot;)    @Length(min &#x3D; 11, max &#x3D; 11, message &#x3D; &quot;传入的电话号码长度有误，必须为11位&quot;)    private String mobile;  &#x2F;&#x2F; 电话号码&#125;</span></pre></td></tr></table></figure>
+
+<p>当然，于此同时，我们还需要在对象入口处，加上注解 <code>@Valid</code>来开启对传入 <code>Student</code>对象的验证工作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">@PostMapping(&quot;&#x2F;add&quot;)public String addStudent( @RequestBody  @Valid Student student ) &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    &#x2F;&#x2F; 棒棒哒！原先各种繁杂的参数校验工作统统都省了！一行代码不用写</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    studentService.addStudent( student ); &#x2F;&#x2F; 将student对象存入MySQL数据库    return &quot;SUCCESS&quot;;&#125;</span></pre></td></tr></table></figure>
+
+<p>这时候，如果某个字段传入错误，比如我传数据的时候，将学生的成绩误传为 <code>101</code>分，则接口返回结果便会提示出错误详情：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzr1wjoePznKKsVVsfolIIFQZ7pEZzt59Ock28dORwTKyWQoK80Iw1XcW6mJicWA1RCpk24Lz88JjGw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p><img src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" alt="img"></p>
+<p>当然，关于这个事情的原理，既然用到了注解，无非用的也就是Java里的各种反射等知识来实现的，感兴趣的小伙伴可以借此机会研究一下！</p>
+<hr>
+<p> <strong>数据异常统一拦截</strong> </p>
+<p>上面利用注解的方式做统一数据校验<strong>感觉十分美好</strong>，但唯一美中不足的就是返回的<strong>结果太过繁杂</strong>，不一定使我们需要的格式，我们需要做<strong>统一处理</strong>，比如：我只想将具体参数校验的错误提示信息给<strong>抠出来</strong>返回给前端即可。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/xq9PqibkVAzr1wjoePznKKsVVsfolIIFQL0zEvdib99IQKJIp3gJoQu9OA7jTg8uP8kcbxytZOoBibYC7e1nUTtsw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>为此，我们为项目配置<strong>全局统一异常拦截器</strong>来格式化所有数据校验的返回结果。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">@ControllerAdvice@ResponseBodypublic class GlobalExceptionInterceptor &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">  @ExceptionHandler(value &#x3D; Exception.class)  public String exceptionHandler(HttpServletRequest request, Exception e) &#123;    String failMsg &#x3D; null;    if (e instanceof MethodArgumentNotValidException) &#123;      &#x2F;&#x2F; 拿到参数校验具体异常信息提示      failMsg &#x3D; ((MethodArgumentNotValidException) e).getBindingResult().getFieldError().getDefaultMessage();    &#125;    return failMsg; &#x2F;&#x2F; 直接吐回给前端  &#125;&#125;</span></pre></td></tr></table></figure>
+
+<p>如上面代码所示，我们<strong>全局统一拦截了</strong>参数校验异常 <code>MethodArgumentNotValidException</code>，并仅仅只拿到对应异常的详细 <code>Message</code>信息吐给前端，此时返回给前端的数据就清楚得多：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzr1wjoePznKKsVVsfolIIFQa38LMfjbZ7oibRduV6jsTYFbib0wBDzvf5JwpCkJibp7O3ekyy90pfv3w/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>可以的，非常优雅！</p>
+<p>每天进步一点点！Peace！</p>
+<p>2019.12.25晚，圣诞节快乐！</p>
+<h1 id="For循环"><a href="#For循环" class="headerlink" title="For循环"></a>For循环</h1><p> <strong>请 听 题</strong> </p>
+<p>给定一个字符串元素列表，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">[&quot;1&quot;, &quot;2&quot;, &quot;bilibili&quot;, &quot;of&quot;, &quot;codesheep&quot;, &quot;5&quot;, &quot;at&quot;, &quot;BILIBILI&quot;, &quot;codesheep&quot;, &quot;23&quot;, &quot;CHEERS&quot;, &quot;6&quot;]</span></pre></td></tr></table></figure>
+
+<p>里面有数字型字符串，有字母型字符串；字符串里有大写，也有小写；字符串长度也有长有短</p>
+<p>现在要写代码完成<strong>一个小功能</strong>：</p>
+<blockquote>
+<p>我想找出所有 <strong>长度&gt;=5</strong>的字符串，并且<strong>忽略大小写</strong>、<strong>去除重复字符串</strong>，然后<strong>按字母排序</strong>，最后<strong>用“爱心❤”连接成一个字符串</strong>输出！</p>
+</blockquote>
+<p>哟，就这点需求能难倒我？三分钟之类必搞定！</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzqcfFcl4kjly8H0qEyq8qf88BSYCTHPCvjacdxribCnHpDmt9SELMiatGbGgNiakb8VLDpyBzzWQYZZg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>首先我写一个函数，判断输入字符串到底是字母还是数字</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">public static Boolean isNum( String str ) &#123;    for( int i&#x3D;0; i&lt;str.length(); i++ ) &#123;        if (!Character.isDigit(str.charAt(i))) &#123;            return false;        &#125;    &#125;    return true;&#125;</span></pre></td></tr></table></figure>
+
+<p>接下来我一顿SAO操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 先定义一个具备按字母排序功能的Set容器，Set本身即可去重Set&lt;String&gt; stringSet &#x3D; new TreeSet&lt;String&gt;(        new Comparator&lt;String&gt;() &#123;            @Override            public int compare(String o1, String o2) &#123;                return o1.compareTo(o2);  &#x2F;&#x2F; 按字母顺序排列            &#125;        &#125;);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 以下for循环完成元素去重、大小写转换、长度判断等操作for( int i&#x3D;0; i&lt;list.size(); i++ ) &#123;    String s &#x3D; list.get(i);    if( !isNum(s) &amp;&amp; s.length()&gt;&#x3D;5 ) &#123;        String sLower &#x3D; s.toLowerCase(); &#x2F;&#x2F; 统一转小写        stringSet.add( sLower );    &#125;&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 以下for循环完成连词成句StringBuilder result &#x3D; new StringBuilder();for( String s : stringSet ) &#123;    result.append( s );    result.append(&quot;❤&quot;); &#x2F;&#x2F; 用“爱心”连接符连接&#125;String finalResult &#x3D; result.substring(0,result.length()-1).toString();  &#x2F;&#x2F; 去掉最后一个多余连接符</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">System.out.println( finalResult );</span></pre></td></tr></table></figure>
+
+<p>最后输出结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">bilibili❤cheers❤codesheep</span></pre></td></tr></table></figure>
+
+<p>啪啪啪，打脸</p>
+<p><img src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" alt="img"></p>
+<p>我原以为这个功能我只需要3分钟即可写完并运行出结果，而实际对时我发现我居然花了5分钟。。。 </p>
+<p>而且我现在是一看到<strong>for循环</strong>遍历，我头就痛，上面代码倒还好，假如列表层级变复杂，<strong>俄罗斯套娃式的for循环</strong> 谁扛得住。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzqnuiaMzfNIG9n52WUoMoiagpnOlyqSicwPDiaNBdbyD4RXO0ajicoztQwicjRg4eGaXFq2g3nDblgsFIog/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<hr>
+<p> <strong>函数式编程，爽！</strong> </p>
+<p>没错，自Java 8开始，引入了函数式编程范式，这对于咱这种<strong>底层劳动密集型码畜</strong>来说，简直解放了双手，代码几乎少写一半，从此真正实现<strong>编码5分钟，划水2小时</strong>！</p>
+<p><img src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" alt="img"></p>
+<p>针对上面的作业，用Java 8的 <code>Stream</code>流式操作，仅需<strong>一行代码</strong>就可以搞定，for循环啥的统统灰飞烟灭。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">String result &#x3D; list.stream()&#x2F;&#x2F; 首先将列表转化为Stream流        .filter( i -&gt; !isNum(i) )&#x2F;&#x2F; 首先筛选出字母型字符串        .filter( i -&gt; i.length() &gt;&#x3D; 5 )&#x2F;&#x2F; 其次筛选出长度&gt;&#x3D;5的字符串        .map( i -&gt; i.toLowerCase() )&#x2F;&#x2F; 字符串统一转小写        .distinct()                 &#x2F;&#x2F; 去重操作来一下        .sorted( Comparator.naturalOrder() ) &#x2F;&#x2F; 字符串排序来一下        .collect( Collectors.joining(&quot;❤&quot;) ); &#x2F;&#x2F; 连词成句来一下，完美！</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">System.out.println(result);</span></pre></td></tr></table></figure>
+
+<p>怎么样，这代码信噪比可以吧</p>
+<p><img src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" alt="img"></p>
+<hr>
+<p> <strong>言归正传</strong> </p>
+<p>上面其实已经通过举栗的方式阐述了Java 8函数式编程范式：<strong>Stream流</strong> 的优雅和强大，尤其在处理集合时，几本一步到位，嘎嘣脆。</p>
+<p>当然<strong>Stream</strong>也仅仅只是Java 8函数式编程接口的一个而已，除了Stream接口，还有其他非常强大的函数式编程接口，比如：</p>
+<ul>
+<li><strong><code>Consumer</code>接口</strong></li>
+<li><strong><code>Optional</code>接口</strong></li>
+<li><strong><code>Function</code>接口</strong></li>
+</ul>
+<p>每个接口我们都来举一个好理解的例子，看完保证你难以拒绝！</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzqcfFcl4kjly8H0qEyq8qf80aQjdmDyenia6Xc1ichTwCu8p0kMESpXbrWbeiaeib8Pca3iaexnjU82mKA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p><strong>一、Consumer接口</strong></p>
+<p>顾名思义，它是“消费者的含义”，接受参数而不返回值，举个最最常见的栗子：</p>
+<p>平时我们打印字符串，本质也是接受一个参数并打印出来，我们一般想都不想，会这样写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">System.out.println(&quot;hello world&quot;);     &#x2F;&#x2F; 打印 hello worldSystem.out.println(&quot;hello codesheep&quot;); &#x2F;&#x2F; 打印 hello codesheepSystem.out.println(&quot;bilibili cheers&quot;); &#x2F;&#x2F; 打印 bilibili cheers</span></pre></td></tr></table></figure>
+
+<p>一旦你用了 <code>Consumer</code>之后，总感觉更加优雅一些</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">Consumer c &#x3D; System.out::println;  </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">c.accept(&quot;hello world&quot;);      &#x2F;&#x2F; 打印 hello worldc.accept(&quot;hello codesheep&quot;);  &#x2F;&#x2F; 打印 hello codesheepc.accept(&quot;bilibili cheers&quot;);  &#x2F;&#x2F; 打印 bilibili cheers</span></pre></td></tr></table></figure>
+
+<p>而且 <code>Consumer</code>还可以用联用，达到多重处理的效果，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">c.andThen(c).andThen(c).accept(&quot;hello world&quot;); &#x2F;&#x2F; 会连续打印 3次：hello world</span></pre></td></tr></table></figure>
+
+<p>当然本例只是打印字符串，比较简单，若业务更加复杂， <code>Consumer</code>复用带来的便利性还是不小的。</p>
+<p><strong>二、Function接口</strong></p>
+<p><code>Function</code>接口代表的含义是“函数”，其实和上面的 <code>Consumer</code>有点像，不过 <code>Function</code>既有输入，也有输出，使用更加灵活，举例：</p>
+<p>比如我想对一个整数先乘以 <code>2</code>，再计算平方值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">Function&lt;Integer,Integer&gt; f1 &#x3D; i -&gt; i+i;  &#x2F;&#x2F; 乘以2功能Function&lt;Integer,Integer&gt; f2 &#x3D; i -&gt; i*i;  &#x2F;&#x2F; 平方功能Consumer c &#x3D; System.out::println;         &#x2F;&#x2F; 打印功能</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">c.accept( f1.andThen(f2).apply(2) );      &#x2F;&#x2F; 三种功能组合：打印结果 16</span></pre></td></tr></table></figure>
+
+<p>别的不说，这个炫技操作还是可以的！</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_gif/xq9PqibkVAzqcfFcl4kjly8H0qEyq8qf8jxWWT1a4TT8f0pjLAA6SNicHcAGrzfic8ib1x8Z9CeAD4TvEL6LHTMCPQ/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1" alt="img"></p>
+<p><strong>三、Optional接口</strong></p>
+<p><code>Optional</code>本质是个容器，你可以将你的变量交由它进行封装，这样我们就不用显式对原变量进行 <code>null</code>值检测，防止出现各种空指针异常。举例：</p>
+<p>我们想写一个获取学生某个课程考试分数的函数：<code>getScore()</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">public Integer getScore( Student student ) &#123;    if( student !&#x3D; null ) &#123;      &#x2F;&#x2F; 第一层 null判空        Subject subject &#x3D; student.getSubject();        if( subject !&#x3D; null ) &#123;  &#x2F;&#x2F; 第二层 null判空            return subject.score;        &#125;    &#125;    return null;&#125;</span></pre></td></tr></table></figure>
+
+<p>这样写倒不是不可以，但我们作为一个<strong>“严谨且良心的”</strong>后端工程师，这么多嵌套的 if 判空多少有点扎眼！</p>
+<p>为此我们必须引入 <code>Optional</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">public Integer getScore( Student student ) &#123;    return Optional.ofNullable(student)            .map( Student::getSubject )            .map( Subject::getScore )            .orElse(null);&#125;</span></pre></td></tr></table></figure>
+
+<p>漂亮！嵌套的if/else判空灰飞烟灭！</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzqcfFcl4kjly8H0qEyq8qf8qUWxoBTcicZpMdGxpjWXUButk7DCnwrZtzkr1kkmHfGXcSIqL63RFeQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<hr>
+<p> <strong>立个Flag (滑稽)</strong> </p>
+<p>好啦，本文就抛砖引玉到这里了，大家可以在自己的代码中用函数式编程范式尝试做<strong>小规模重构</strong>，相信用起来还是非常甜蜜的。</p>
+<p>立个Flag，以后写代码，估计我会很少使用for循环了（滑稽），Stream流用起来简直不要太爽啊。。。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/xq9PqibkVAzqcfFcl4kjly8H0qEyq8qf8gXeXqHtExxDpWtODMhMt9jfu1iccLnia4AbS2ibIMJLYCSfEGOcJ032Yg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>开个玩笑，函数式编程范式虽然用起来很爽，但也最好根据<strong>实际业务情况</strong>来决定是否使用，毕竟大面积的动态范式代码还是挺难看懂和维护的，总之就一句话，<strong>理性使用，不要滥用</strong>。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/01/07/%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-Typora语法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -669,7 +1267,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2019 Yuu YERML
+    		&copy; 2020 Yuu YERML
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
