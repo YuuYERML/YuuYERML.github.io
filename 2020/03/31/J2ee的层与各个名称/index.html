@@ -6,17 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Server Init Software | YuuYERML Blog</title>
+  <title>J2ee的层与各个名称 | YuuYERML Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="虚拟机centOS安装前提安装了VMware或者其他虚拟机，以及下载CentOS镜像iso文件">
+  <meta name="description" content="J2EE的各个层理解">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Server Init Software">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;18&#x2F;VMServer-Init-Software&#x2F;index.html">
+<meta property="og:title" content="J2ee的层与各个名称">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;31&#x2F;J2ee%E7%9A%84%E5%B1%82%E4%B8%8E%E5%90%84%E4%B8%AA%E5%90%8D%E7%A7%B0&#x2F;index.html">
 <meta property="og:site_name" content="YuuYERML Blog">
-<meta property="og:description" content="虚拟机centOS安装前提安装了VMware或者其他虚拟机，以及下载CentOS镜像iso文件">
+<meta property="og:description" content="J2EE的各个层理解">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-18T08:45:51.464Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;images2018.cnblogs.com&#x2F;blog&#x2F;417876&#x2F;201712&#x2F;417876-20171203232709851-347591406.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;images2018.cnblogs.com&#x2F;blog&#x2F;417876&#x2F;201712&#x2F;417876-20171203232655741-434600538.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;images2018.cnblogs.com&#x2F;blog&#x2F;1106760&#x2F;201807&#x2F;1106760-20180726184907911-220706831.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;images2018.cnblogs.com&#x2F;blog&#x2F;1106760&#x2F;201807&#x2F;1106760-20180726185023235-318662027.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;images2018.cnblogs.com&#x2F;blog&#x2F;1106760&#x2F;201807&#x2F;1106760-20180726184927507-1760800999.png">
+<meta property="og:updated_time" content="2020-03-31T10:14:08.561Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;images2018.cnblogs.com&#x2F;blog&#x2F;417876&#x2F;201712&#x2F;417876-20171203232709851-347591406.png">
   
     <link rel="alternative" href="/atom.xml" title="YuuYERML Blog" type="application/atom+xml">
   
@@ -151,77 +157,111 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-VMServer-Init-Software" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-J2ee的层与各个名称" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Server Init Software
+      J2ee的层与各个名称
     </h1>
   
 
         
-        <a href="/2019/12/18/VMServer-Init-Software/" class="archive-article-date">
-  	<time datetime="2019-12-18T07:20:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-18</time>
+        <a href="/2020/03/31/J2ee%E7%9A%84%E5%B1%82%E4%B8%8E%E5%90%84%E4%B8%AA%E5%90%8D%E7%A7%B0/" class="archive-article-date">
+  	<time datetime="2020-03-31T09:42:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="虚拟机centOS安装"><a href="#虚拟机centOS安装" class="headerlink" title="虚拟机centOS安装"></a>虚拟机centOS安装</h1><h3 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h3><p>安装了VMware或者其他虚拟机，以及下载CentOS镜像iso文件</p>
-<a id="more"></a>
-<h3 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h3><p>一路回车，到可视化页面，选中文，或者选什么随便，日期设置，键盘不用管，语言中文，安装源不用换，软件选择可以选择GNOME桌面，好看</p>
-<h3 id="进入主界面"><a href="#进入主界面" class="headerlink" title="进入主界面"></a>进入主界面</h3><p>先创建用户，如果不是root那就创一个，不是那就不用了，如果不能sudo那就su切换root用户在/etc/sudoers里root ALL什么一行下面加上root用自己名字替换的，后面照抄</p>
-<h3 id="创建用户"><a href="#创建用户" class="headerlink" title="创建用户"></a>创建用户</h3><p>root用户直接用很危险，比如什么时候输入个rm -rf /*不就完了嘛，所以要新建用户</p>
+        <h1 id="J2EE的各个层理解"><a href="#J2EE的各个层理解" class="headerlink" title="J2EE的各个层理解"></a>J2EE的各个层理解</h1><a id="more"></a>
+
+<h2 id="Java中PO、BO、VO、DTO、POJO、DAO概念及其作用和项目实例图（转）"><a href="#Java中PO、BO、VO、DTO、POJO、DAO概念及其作用和项目实例图（转）" class="headerlink" title="Java中PO、BO、VO、DTO、POJO、DAO概念及其作用和项目实例图（转）"></a>Java中PO、BO、VO、DTO、POJO、DAO概念及其作用和项目实例图（转）</h2><p><strong>PO（bean、entity等命名）：</strong></p>
+<p>Persistant Object持久对象，数据库表中的记录在java对象中的显示状态</p>
+<p>最形象的理解就是一个PO就是数据库中的一条记录。</p>
+<p>好处是可以把一条记录作为一个对象处理，可以方便的转为其它对象。 </p>
+<p><strong>BO（service、manager、business等命名）：</strong></p>
+<p>Business Object业务对象</p>
+<p>主要作用是把业务逻辑封装为一个对象。这个对象可以包括一个或多个其它的对象。</p>
+<p>形象描述为一个对象的形为和动作，当然也有涉及到基它对象的一些形为和动作。比如处理</p>
+<p>一个人的业务逻辑，有睡觉，吃饭，工作，上班等等形为还有可能和别人发关系的形为。</p>
+<p>这样处理业务逻辑时，我们就可以针对BO去处理。</p>
+<p><strong>VO（from也有此写法） ：</strong></p>
+<p>Value Object值对象</p>
+<p>主要体现在视图的对象，对于一个WEB页面将整个页面的属性封装成一个对象。然后用一个VO对象在控制层与视图层进行传输交换。</p>
+<p><strong>DTO (经过处理后的PO，可能增加或者减少PO的属性)：</strong></p>
+<p>Data Transfer Object数据传输对象</p>
+<p>主要用于远程调用等需要大量传输对象的地方。</p>
+<p>比如我们一张表有100个字段，那么对应的PO就有100个属性。</p>
+<p>但是我们界面上只要显示10个字段，</p>
+<p>客户端用WEB service来获取数据，没有必要把整个PO对象传递到客户端，</p>
+<p>这时我们就可以用只有这10个属性的DTO来传递结果到客户端，这样也不会暴露服务端表结构.到达客户端以后，如果用这个对象来对应界面显示，那此时它的身份就转为VO </p>
+<p><strong>POJO（POJO是一种概念或者接口，身份及作用随环境变化而变化） ：</strong></p>
+<p>POJO有一些Private的参数作为对象的属性。然后针对每个参数定义了get和set方法作为访问的接口</p>
+<p>Plain Ordinary Java Object简单Java对象</p>
+<p>即POJO是一个简单的普通的Java对象，它不包含业务逻辑或持久逻辑等，但不是JavaBean、EntityBean等，不具有任何特殊角色和不继承或不实现任何其它Java框架的类或接口。</p>
+<p>POJO对象有时也被称为Data对象，大量应用于表现现实中的对象。 </p>
+<p>一个POJO持久化以后就是PO。</p>
+<p>直接用它传递、传递过程中就是DTO</p>
+<p>直接用来对应表示层就是VO </p>
+<p><img src="https://images2018.cnblogs.com/blog/417876/201712/417876-20171203232709851-347591406.png" alt="img"></p>
+<p><strong>DAO（Data Access Object数据访问对象）：</strong></p>
+<p>这个大家最熟悉，和上面几个O区别最大，基本没有互相转化的可能性和必要.</p>
+<p>主要用来封装对数据库的访问。通过它可以把POJO持久化为PO，用PO组装出来VO、DTO</p>
+<p><strong>Controller控制层主要是Action/Servlet等构成（目前Spring MVC则是通过@Controller标签使用）</strong></p>
+<p>此层业务层与视图层打交道的中间层，负责传输VO对象和调用BO层的业务方法，负责视图层请求的数据处理后响应给视图层。</p>
+<p><strong>View（视图层）</strong></p>
+<p>主要是指由JSP、HTML等文件形成的显示层。</p>
+<p>总结一下要用具体的X0需要看具体环境及项目架构，在不同的层、不同的应用场合，对象的身份也不一样，而且对象身份的转化也是很自然的。就像你对老婆来说就是老公，对父母来说就是子女。设计这些概念的初衷不是为了唬人而是为了更好的理解和处理各种逻辑，让大家能更好的去用面向对象的方式处理问题。</p>
+<p>在平时开发项目中大家千万过度设计各层，因为这样会带来大量的工作和重复工作。如果不是大型系统可简化一些层，因为技术是为应用服务的。</p>
+<p><strong>上述名词在实际项目的应用举例：</strong></p>
+<p>控制层(controller-action)，业务层/服务层( bo-manager )，实体层(po-entity)，dao(dao)，视图对象(Vo-本项目省略)，视图层(view-jsp/html)</p>
+<p><a href="https://images2018.cnblogs.com/blog/417876/201712/417876-20171203232655741-434600538.png" target="_blank" rel="noopener"><img src="https://images2018.cnblogs.com/blog/417876/201712/417876-20171203232655741-434600538.png" alt="img"></a></p>
+<h2 id="另一种描述"><a href="#另一种描述" class="headerlink" title="另一种描述"></a>另一种描述</h2><p>在前后台分离的情况下，我们对前端一般会以WEB API的形式同过JSON交互来与前端进行交互。一般来讲，我们的数据模型会在controller层进行交互，进行数据的校验与处理，然后交给service层进行相应的逻辑处理。如果service需要与数据库的支持，则调用dao层来获取与存储数据。这样分层的好处是当我们的数据存储方式发生了变化，如我们的数据库从oracle变成了mysql，我们只要改一下dao层的配置，不会影响我们的业务代码，特别注意的是，如果service层在调用不同的表时，我们最好调用对应表的service层的方法，不应该出现一个service调用多个dao的情况。</p>
+<p><img src="https://images2018.cnblogs.com/blog/1106760/201807/1106760-20180726184907911-220706831.png" alt="img"></p>
+<p> 　2.<strong>分层领域模型</strong></p>
+<p>在阿里巴巴编码规约中列举了下面几个领域模型规约: </p>
+<ul>
+<li>DO（Data Object）：与数据库表结构一一对应，通过DAO层向上传输数据源对象。 </li>
+<li>DTO（Data Transfer Object）：数据传输对象，Service或Manager向外传输的对象。 </li>
+<li>BO（Business Object）：业务对象。由Service层输出的封装业务逻辑的对象。 </li>
+<li>AO（Application Object）：应用对象。在Web层与Service层之间抽象的复用对象模型，极为贴近展示层，复用度不高。 </li>
+<li>VO（View Object）：显示层对象，通常是Web向模板渲染引擎层传输的对象。 </li>
+<li>Query：数据查询对象，各层接收上层的查询请求。注意超过2个参数的查询封装，禁止使用Map类来传输。</li>
+</ul>
+<p><strong><img src="https://images2018.cnblogs.com/blog/1106760/201807/1106760-20180726185023235-318662027.png" alt="img"></strong></p>
+<p>而对于数据模型也就是我们所谓的bean来讲，我们最好在不同的层里面使用不同的对象。因为这样可以更灵活的操控不同层的数据</p>
+<p>但每一个层基本都自己对应的领域模型，这样就导致了有些人过于追求每一层都是用自己的领域模型，这样就导致了一个对象可能会出现3次甚至4次转换在一次请求中，当返回的时候同样也会出现3-4次转换，这样有可能一次完整的请求-返回会出现很多次对象转换。如果在开发中真的按照这么来，恐怕就别写其他的了，一天就光写这个重复无用的逻辑算了吧。</p>
+<p><img src="https://images2018.cnblogs.com/blog/1106760/201807/1106760-20180726184927507-1760800999.png" alt="img"></p>
+<p><strong>使用springboot创建接口</strong></p>
 <ol>
-<li>创建用户\：<strong><code>useradd yuu</code></strong></li>
-<li>设置密码\： <strong><code>passwd yuu</code></strong>,然后输入密码，然后再输入一次确认密码</li>
-<li>添加sudoers：在root用户下输入<strong>vim /etc/sudoers</strong>然后下面找到<code>root    ALL=(ALL)     ALL</code>，在下一行加入<code>yuu    ALL=(ALL)     ALL</code></li>
-<li>vim用法，学，就要写东西前都要先点i进入插入模式，退出都要先esc退出插入模式，然后输入：wq，后面有个！加不加都行<h3 id="部署环境"><a href="#部署环境" class="headerlink" title="部署环境"></a>部署环境</h3><h5 id="基本要下载的东西都部署在一个你知道的文件夹下比较好"><a href="#基本要下载的东西都部署在一个你知道的文件夹下比较好" class="headerlink" title="基本要下载的东西都部署在一个你知道的文件夹下比较好"></a>基本要下载的东西都部署在一个你知道的文件夹下比较好</h5></li>
+<li><p>创建对应的包</p>
+<p>controller/控制器层</p>
+<p>entity/实体类（Pojo /基础对象）</p>
+<p>mapper/持久层 （Dao/持久对象）</p>
+<p>impl/业务层实现类（Service/服务层对象)</p>
+<p>dao，持久层对象，与数据库直接操作</p>
+<p>dto，vo与页面对象有关</p>
+<p>common，通用的内容可以放在这里，</p>
+</li>
+<li><p>修改配置文件</p>
+<p>数据库通用内容在applicationcontext中添加一个能够连接dataresource的内容</p>
+</li>
+<li><p>创建数据库</p>
+<p>创建一个数据库</p>
+</li>
+<li><p>写实体类（描写Pojo，写一样就行）</p>
+</li>
+<li><p>写持久层接口Mapper</p>
+</li>
+<li><p>写业务层接口Server</p>
+</li>
+<li><p>写业务层实体类impl</p>
+</li>
 </ol>
-<p>+. <strong><a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank" rel="noopener">Java</a></strong></p>
-<ul>
-<li>在usr目录下创建文件夹 <strong>cd /usr</strong>然后<strong>mkdir java &amp;&amp; cd java</strong></li>
-<li>下载：<strong><code>wget --no-check-certificate --no-cookies --header &quot;Cookie: oraclelicense=accept-securebackup-cookie&quot; https://download.oracle.com/otn-pub/java/jdk/13.0.1+9/cec27d702aa74d5a8630c65ae61e4305/jdk-13.0.1_linux-x64_bin.tar.gz</code></strong></li>
-<li>解压并改名：<strong>tar zxvf jdk(按tab可以自动补全)</strong>，修改名字mv 老名字 新名字，如sudo mv jdk-13.0.1 jdk</li>
-<li>修改环境变量： <strong>sudo vim /etc/profile</strong>，在文件中最下面加入下面几行<strong><code>export JAVA_HOME=jdk的目录(回车)export CLASSPATH=$JAVA_HOME/lib/（回车）export PATH=$JAVA_HOME/bin:$PATH（回车）export PATH JAVA_HOME CLASSPATH</code></strong></li>
-<li>重新加载配置文件 <strong>source /etc/profile</strong></li>
-<li>查看java安装成否 <strong>java -version</strong></li>
-</ul>
-<hr>
-<p>+. <strong><a href="http://tomcat.apache.org/" target="_blank" rel="noopener">tomcat</a></strong></p>
-<ul>
-<li>在usr目录下创建文件夹 <strong>cd /usr</strong>然后<strong>mkdir tomcat &amp;&amp; cd tomcat</strong></li>
-<li>下载：<strong><code>wget http://mirror.bit.edu.cn/apache/tomcat/tomcat-9/v9.0.29/bin/apache-tomcat-9.0.29.tar.gz</code></strong></li>
-<li>解压并改名： <strong>tar -xf apache-tomcat</strong>,修改名字</li>
-<li>操作：启动在bin文件中，<strong>./startup.bat开启,./shutdown.bat关闭</strong></li>
-</ul>
-<hr>
-<p>+. <strong><a href="https://dev.mysql.com/downloads/repo/yum/" target="_blank" rel="noopener">mysql</a></strong></p>
-<ul>
-<li>在usr目录下创建文件夹 <strong>cd /usr</strong>然后<strong>mkdir mysql &amp;&amp; cd mysql</strong></li>
-<li>下载：<strong><code>wget https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm</code></strong></li>
-<li>本地安装源: <strong><code>yum -y localinstall mysql80-community-release-el7-1.noarch.rpm</code></strong></li>
-<li>查看并下载： <strong>yum repolist all | grep mysql</strong>，看到之后用<strong>yum install mysql-community-server.x86_64</strong></li>
-<li>数据库操作： <strong>service mysql start(可以换成stop或者restart)</strong>，刷新权限<strong>flush privileges;</strong>，登陆<strong>mysql -u root -p密码</strong></li>
-<li>跳过验证修改root密码: <strong>vim /etc/my.cnf</strong>,添加一句<strong>skip-grant-tables</strong></li>
-<li>修改root密码：登陆<strong>mysql</strong>，选数据库<strong>use mysql</strong>,sql语句：updata mysql.user set authentication_string=password(‘新设置的密码’)where user=’root’;,刷新权限</li>
-</ul>
-<hr>
-<p>+. <strong><a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git</a></strong></p>
-<ul>
-<li>在usr目录下创建文件夹 <strong>cd /usr</strong>然后<strong>mkdir git &amp;&amp; cd git</strong></li>
-<li>查看是否存在和下载前置：检查<strong>git –version</strong>,安装前置<strong>yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-devel</strong>和** yum install gcc-c++ perl-ExtUtils-MakeMaker**</li>
-<li>下载：<strong><code>wget https://github.com/git/git/archive/v2.24.1.tar.gz</code></strong></li>
-<li>解压：<strong>tar -xvzf soft git-</strong></li>
-<li>进入到文件夹，编译安装，<strong>cd git..</strong>，执行make和configure，<strong>./configure</strong>和<strong>make&amp;&amp;make install</strong></li>
-<li>增加环境变量，<strong>export PATH=$PATH:/usr/git/bin</strong></li>
-<li>检查git：<strong>git –version</strong></li>
-</ul>
-<hr>
 
       
 
@@ -301,7 +341,7 @@
     <a class="close js-modal-close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/12/18/VMServer-Init-Software/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/03/31/J2ee%E7%9A%84%E5%B1%82%E4%B8%8E%E5%90%84%E4%B8%AA%E5%90%8D%E7%A7%B0/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -315,18 +355,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/12/30/SpringBoot%E7%AC%94%E8%AE%B0/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          SpringBoot笔记
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/12/10/JSbase/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">JSbase</div>
+    <a href="/2020/01/07/%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">代码优化</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -353,7 +384,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#虚拟机centOS安装"><span class="toc-number">1.</span> <span class="toc-text">虚拟机centOS安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#前提"><span class="toc-number">1.0.1.</span> <span class="toc-text">前提</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开始安装"><span class="toc-number">1.0.2.</span> <span class="toc-text">开始安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进入主界面"><span class="toc-number">1.0.3.</span> <span class="toc-text">进入主界面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建用户"><span class="toc-number">1.0.4.</span> <span class="toc-text">创建用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#部署环境"><span class="toc-number">1.0.5.</span> <span class="toc-text">部署环境</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#基本要下载的东西都部署在一个你知道的文件夹下比较好"><span class="toc-number">1.0.5.0.1.</span> <span class="toc-text">基本要下载的东西都部署在一个你知道的文件夹下比较好</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#J2EE的各个层理解"><span class="toc-number">1.</span> <span class="toc-text">J2EE的各个层理解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java中PO、BO、VO、DTO、POJO、DAO概念及其作用和项目实例图（转）"><span class="toc-number">1.1.</span> <span class="toc-text">Java中PO、BO、VO、DTO、POJO、DAO概念及其作用和项目实例图（转）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#另一种描述"><span class="toc-number">1.2.</span> <span class="toc-text">另一种描述</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
